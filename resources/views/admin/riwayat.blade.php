@@ -76,6 +76,15 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('admin.tiket.index') }}" class="app-nav-item {{ request()->routeIs('admin.tiket.*') ? 'active' : '' }}">
+                            <div class="app-nav-item-left">
+                                <i class="fi fi-rr-ticket" style="font-size: 16px;"></i>
+                                <span>Daftar Tiket Support</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('admin.users.index') }}" class="app-nav-item">
                             <div class="app-nav-item-left">
                                 <svg width="18" height="18" style="width: 18px; height: 18px; flex-shrink: 0;" viewBox="0 0 24 24" fill="currentColor">
@@ -298,8 +307,11 @@
                                     <tr>
                                         <!-- 1. No Tiket -->
                                         <td>
-                                            <div style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 13px;">
-                                                {{ $item->nomor_tiket }}
+                                            <div>
+                                                <a href="{{ route('admin.tiket.show', $item->id) }}" style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Buka Detail Progress Tiket">
+                                                    <span>{{ $item->nomor_tiket }}</span>
+                                                    <i class="fi fi-rr-arrow-up-right" style="font-size: 10px;"></i>
+                                                </a>
                                             </div>
                                             <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
                                                 {{ $item->created_at->format('d/m/Y H:i') }} WIB

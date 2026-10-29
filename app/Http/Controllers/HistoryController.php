@@ -466,4 +466,49 @@ class HistoryController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    /**
+     * Halaman Daftar Tiket Support Sisi Admin (Ala DomaiNesia)
+     */
+    public function tiketIndex(Request $request)
+    {
+        $query = TiketDtsen::query()->latest('updated_at');
+
+        if ($request->filled('search')) {
+            $search = '%' . trim($request->search) . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_tiket', 'like', $search)
+                  ->orWhere('nama_instansi', 'like', $search)
+                  ->orWhere('no_surat_edaran', 'like', $search)
+                  ->orWhere('nama_pemohon', 'like', $search);
+            });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'SELESAI') {
+                $query->where('step5_done', true);
+            } elseif ($request->status === 'REVISI') {
+                $query->where('status', 'PERLU_PERBAIKAN');
+            } elseif ($request->status === 'PROSES') {
+                $query->where('step5_done', false)
+                      ->where('status', '!=', 'PERLU_PERBAIKAN');
+            }
+        }
+
+        $tikets = $query->paginate(12)->withQueryString();
+
+        return view('admin.tiket.index', compact('tikets'));
+    }
+
+    /**
+     * Halaman Detail Progress Tiket Sisi Admin
+     * Menampilkan visual progress 5 tahap secara lebih jelas dengan kontrol verifikasi
+     */
+    public function tiketShow($id)
+    {
+        $tiket = TiketDtsen::findOrFail($id);
+
+        return view('admin.tiket.show', compact('tiket'));
+    }
 }
+

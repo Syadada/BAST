@@ -30,7 +30,71 @@ class ProfileController extends Controller
     }
 
     /**
-     * 2. Halaman Layanan Bagi Pakai DTSEN
+     * 2. Halaman Daftar Tiket OPD (Ala DomaiNesia Support Tickets)
+     * Menampilkan: Nama Instansi, Subject (No Tiket - Clickable), Status, Last Updated
+     */
+    public function daftarTiket(Request $request)
+    {
+        $user = Auth::user();
+        $namaInstansi = $user->nama_instansi ?: $user->name;
+
+        $query = TiketDtsen::where(function ($q) use ($user, $namaInstansi) {
+                $q->where('nama_instansi', 'like', '%' . $namaInstansi . '%')
+                  ->orWhere('email_pemohon', $user->email);
+            })
+            ->latest('updated_at');
+
+        // Filter Pencarian
+        if ($request->filled('search')) {
+            $search = '%' . trim($request->search) . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_tiket', 'like', $search)
+                  ->orWhere('no_surat_edaran', 'like', $search)
+                  ->orWhere('nama_pemohon', 'like', $search);
+            });
+        }
+
+        // Filter Status
+        if ($request->filled('status')) {
+            if ($request->status === 'SELESAI') {
+                $query->where('step5_done', true);
+            } elseif ($request->status === 'REVISI') {
+                $query->where('status', 'PERLU_PERBAIKAN');
+            } elseif ($request->status === 'PROSES') {
+                $query->where('step5_done', false)
+                      ->where('status', '!=', 'PERLU_PERBAIKAN');
+            }
+        }
+
+        $tikets = $query->paginate(10)->withQueryString();
+
+        return view('opd.tiket.index', compact('user', 'tikets'));
+    }
+
+    /**
+     * 3. Halaman Detail Progress Tiket OPD
+     * Menampilkan alur 5 tahapan progress secara lebih jelas dan interaktif
+     */
+    public function showTiket($id)
+    {
+        $user = Auth::user();
+        $namaInstansi = $user->nama_instansi ?: $user->name;
+
+        $tiket = TiketDtsen::where('id', $id)
+            ->where(function ($q) use ($user, $namaInstansi) {
+                // Keamanan data: hanya pemilik tiket yang dapat membuka (kecuali admin)
+                if (!$user->isSuperAdmin()) {
+                    $q->where('nama_instansi', 'like', '%' . $namaInstansi . '%')
+                      ->orWhere('email_pemohon', $user->email);
+                }
+            })
+            ->firstOrFail();
+
+        return view('opd.tiket.show', compact('user', 'tiket'));
+    }
+
+    /**
+     * 4. Halaman Layanan Bagi Pakai DTSEN
      * Memuat Progress 5 Tahapan Layanan DTSEN & Tabel Data Riwayat Bagi Data DTSEN Resmi
      */
     public function layananBagiPakai()

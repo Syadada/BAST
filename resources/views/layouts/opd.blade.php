@@ -42,15 +42,21 @@
                     <span>Dashboard</span>
                 </a>
 
-                <!-- 2. Layanan Bagi Pakai DTSEN (Progress 5 Tahap & Riwayat BAST) -->
+                <!-- 2. Tiket Saya (Support Tickets ala DomaiNesia) -->
+                <a href="{{ route('opd.tiket.index') }}" class="opd-nav-link {{ request()->routeIs('opd.tiket.*') ? 'active' : '' }}">
+                    <i class="fi fi-rr-ticket"></i>
+                    <span>Tiket Saya</span>
+                </a>
+
+                <!-- 3. Layanan Bagi Pakai DTSEN (Progress 5 Tahap & Riwayat BAST) -->
                 <a href="{{ route('opd.layanan-bagi-pakai') }}" class="opd-nav-link {{ request()->routeIs('opd.layanan-bagi-pakai') || request()->routeIs('profile') ? 'active' : '' }}">
                     <i class="fi fi-rr-document"></i>
                     <span>Layanan Bagi Pakai DTSEN</span>
                 </a>
 
-                <!-- 3. Buat Tiket Baru (Formulir Pengajuan) -->
+                <!-- 4. Buat Tiket Baru (Formulir Pengajuan) -->
                 <a href="{{ route('formulir.index') }}" class="opd-nav-link {{ request()->routeIs('formulir.*') ? 'active' : '' }}">
-                    <i class="fi fi-rr-ticket"></i>
+                    <i class="fi fi-rr-plus"></i>
                     <span>Buat Tiket Baru</span>
                     <span class="opd-nav-badge">+Form</span>
                 </a>

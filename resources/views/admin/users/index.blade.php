@@ -138,7 +138,10 @@
                     <span><i class="fi fi-rr-user"></i> Profil Saya</span>
                 </a>
                 <a href="{{ route('admin.riwayat') }}" class="btn-header-link">
-                    <span><i class="fi fi-rr-document"></i> Manajemen Tiket</span>
+                    <span><i class="fi fi-rr-apps"></i> Manajemen Tiket</span>
+                </a>
+                <a href="{{ route('admin.tiket.index') }}" class="btn-header-link">
+                    <span><i class="fi fi-rr-ticket"></i> Daftar Tiket Support</span>
                 </a>
 
                 <div class="app-user-chip">

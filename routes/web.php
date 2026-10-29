@@ -58,12 +58,15 @@ Route::middleware('auth')->group(function () {
         // 1. Dashboard OPD (Clean Page: Hanya Tombol Buat Tiket Baru & Info Instansi)
         Route::get('/opd/dashboard', [ProfileController::class, 'dashboard'])->name('opd.dashboard');
 
-        // 2. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
+        // 2. Daftar Tiket Saya (Ala DomaiNesia Support Tickets) & Detail Progress
+        Route::get('/opd/tiket', [ProfileController::class, 'daftarTiket'])->name('opd.tiket.index');
+        Route::get('/opd/tiket/{id}', [ProfileController::class, 'showTiket'])->name('opd.tiket.show');
+
+        // 3. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
         Route::get('/opd/layanan-bagi-pakai', [ProfileController::class, 'layananBagiPakai'])->name('opd.layanan-bagi-pakai');
         Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
 
-
-        // Layanan Tiket Permohonan DTSEN & Revisi Variabel
+        // 4. Layanan Tiket Permohonan DTSEN & Revisi Variabel
         Route::get('/formulir', [TiketDtsenController::class, 'index'])->name('formulir.index');
         Route::post('/formulir', [TiketDtsenController::class, 'store'])->name('formulir.store');
         Route::post('/tiket', [TiketDtsenController::class, 'store'])->name('tiket.store');
@@ -82,6 +85,10 @@ Route::middleware('auth')->group(function () {
         // Dashboard Admin (Pengelolaan Seluruh Tiket, Verifikasi SE, Manipulasi Proses)
         Route::get('/dashboard', [HistoryController::class, 'index'])->name('dashboard');
         Route::get('/riwayat', [HistoryController::class, 'index'])->name('riwayat'); // Dukungan alias
+
+        // Daftar Tiket Support (Ala DomaiNesia) & Detail Progress Tiket Sisi Admin
+        Route::get('/tiket', [HistoryController::class, 'tiketIndex'])->name('tiket.index');
+        Route::get('/tiket/{id}', [HistoryController::class, 'tiketShow'])->name('tiket.show');
 
         Route::post('/tiket/{id}/step-ok', [HistoryController::class, 'stepOk'])->name('tiket.step-ok');
         Route::post('/tiket/{id}/update-steps', [HistoryController::class, 'updateSteps'])->name('tiket.update-steps');
