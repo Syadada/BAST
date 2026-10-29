@@ -1,0 +1,51 @@
+name: Otomasi Environment & CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  laravel-environment-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup PHP & Extensions
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo, sqlite3, pdo_sqlite, fileinfo, zip, bcmath, curl
+        coverage: none
+
+    - name: Cache Composer Dependencies
+      uses: actions/cache@v4
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Otomatis Download Dependencies (Composer Install)
+      run: |
+        composer install --no-interaction --prefer-dist --optimize-autoloader --no-progress
+
+    - name: Otomatis Inisialisasi Environment (.env)
+      run: |
+        cp .env.example .env
+        php artisan key:generate
+
+    - name: Otomatis Siapkan Database SQLite & Migrasi
+      run: |
+        touch database/database.sqlite
+        php artisan migrate --force
+        php artisan db:seed --force
+
+    - name: Verifikasi Booting & Daftar Rute Laravel
+      run: |
+        php artisan route:list
+        php artisan about
