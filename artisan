@@ -7,6 +7,54 @@ use Symfony\Component\Console\Input\ArgvInput;
 define('LARAVEL_START', microtime(true));
 
 // Register the Composer autoloader...
+if (! file_exists(__DIR__.'/vendor/autoload.php')) {
+    echo PHP_EOL;
+    echo "=======================================================================" . PHP_EOL;
+    echo " ⚙️  [OTOMASI DEPENDENSI] Folder 'vendor' belum ditemukan." . PHP_EOL;
+    echo "=======================================================================" . PHP_EOL;
+
+    $installed = false;
+    
+    // Coba via composer sistem jika ada
+    @exec('composer --version 2>&1', $out, $code);
+    if (isset($code) && $code === 0) {
+        echo "-> Menjalankan 'composer install' otomatis via Composer sistem..." . PHP_EOL;
+        passthru('composer install --no-interaction --prefer-dist --optimize-autoloader');
+        $installed = file_exists(__DIR__.'/vendor/autoload.php');
+    }
+    
+    // Jika belum berhasil, coba via composer.phar
+    if (! $installed) {
+        $phar = __DIR__.'/composer.phar';
+        if (! file_exists($phar)) {
+            echo "-> Mengunduh composer.phar resmi otomatis dari getcomposer.org..." . PHP_EOL;
+            $data = @file_get_contents('https://getcomposer.org/composer-stable.phar');
+            if ($data) {
+                file_put_contents($phar, $data);
+            }
+        }
+        
+        if (file_exists($phar)) {
+            echo "-> Menjalankan instalasi via composer.phar..." . PHP_EOL;
+            $cmd = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($phar) . ' install --no-interaction --prefer-dist --optimize-autoloader';
+            passthru($cmd);
+            $installed = file_exists(__DIR__.'/vendor/autoload.php');
+        }
+    }
+    
+    if (! $installed) {
+        echo PHP_EOL;
+        echo "❌ [FATAL ERROR TERCEGAH] Dependensi 'vendor/autoload.php' belum tersedia." . PHP_EOL;
+        echo "Silakan lakukan salah satu langkah berikut:" . PHP_EOL;
+        echo " 1. Klik dua kali skrip: auto_setup.bat (Otomatis unduh semua dependensi)" . PHP_EOL;
+        echo " 2. Atau jalankan perintah : composer install" . PHP_EOL;
+        echo "=======================================================================" . PHP_EOL . PHP_EOL;
+        exit(1);
+    }
+    
+    echo "✅ Dependensi berhasil dipasang otomatis! Melanjutkan eksekusi artisan..." . PHP_EOL . PHP_EOL;
+}
+
 require __DIR__.'/vendor/autoload.php';
 
 // Bootstrap Laravel and handle the command...
