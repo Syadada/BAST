@@ -55,7 +55,7 @@
 
             <!-- Informational Notice Box -->
             <div class="form-notice-box">
-                <span style="font-size: 20px;">🛡️</span>
+                <span style="font-size: 20px; color: #1a73e8;"><i class="fi fi-rr-shield-check"></i></span>
                 <div>
                     <span data-i18n="notice_text">Sertifikasi Integritas Otomatis: Dokumen yang Anda unggah akan diproses menggunakan Dual-Hash SHA-256 sebagai jaminan keaslian dan bukti validasi pada lembar pengesahan.</span>
                 </div>

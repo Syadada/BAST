@@ -33,10 +33,10 @@
             <!-- Right Controls -->
             <div class="app-header-right">
                 <a href="{{ route('profile') }}" class="btn-header-link">
-                    <span>👤 Profil Saya</span>
+                    <span><i class="fi fi-rr-user"></i> Profil Saya</span>
                 </a>
                 <a href="{{ route('admin.users.index') }}" class="btn-header-link">
-                    <span>👥 User & Log Laptop</span>
+                    <span><i class="fi fi-rr-users"></i> User & Log Laptop</span>
                 </a>
 
                 <div class="app-user-chip">
@@ -437,12 +437,12 @@
                                                             class="btn-row-action print" 
                                                             style="font-size: 11px; padding: 4px 8px;"
                                                             title="Buka panel manipulasi tahapan secara manual">
-                                                        <span>⚙️ Kelola</span>
+                                                        <span><i class="fi fi-rr-settings"></i> Kelola</span>
                                                     </button>
 
                                                     @if($item->file_surat)
                                                         <a href="{{ route('admin.riwayat.download', $item->id) }}" class="btn-row-action download" style="font-size: 11px; padding: 4px 8px;" title="Unduh Berkas Surat">
-                                                            <span>📥 Surat</span>
+                                                            <span><i class="fi fi-rr-download"></i> Surat</span>
                                                         </a>
                                                     @endif
 
@@ -464,7 +464,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="6" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
-                                            <div style="font-size: 32px; margin-bottom: 10px;">📋</div>
+                                            <div style="font-size: 32px; margin-bottom: 10px; color: #94a3b8;"><i class="fi fi-rr-document"></i></div>
                                             <div style="font-weight: 700; font-size: 15px; color: var(--text-primary);">Belum ada tiket permintaan bagi pakai DTSEN</div>
                                             <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Tiket yang dibuat oleh instansi pemohon akan otomatis muncul di sini.</div>
                                         </td>
@@ -492,7 +492,7 @@
                             <p class="dash-card-subtitle">Log aktivitas sistem dengan pencatatan status integritas otomatis.</p>
                         </div>
                         <a href="{{ route('admin.riwayat.export-logs', ['format' => 'csv']) }}" class="btn-pill-outline">
-                            📥 Unduh Log CSV
+                            <i class="fi fi-rr-download"></i> Unduh Log CSV
                         </a>
                     </div>
 
@@ -665,7 +665,7 @@
                 <div style="padding: 20px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafbfc;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 16px;">🔍</span>
+                            <span style="font-size: 16px;"><i class="fi fi-rr-search"></i></span>
                             <h3 id="verifModalTitle" style="font-size: 16px; font-weight: 700; color: #1f1f1f; margin: 0;">Verifikasi Variabel vs Surat Edaran</h3>
                         </div>
                         <div id="verifModalSubtitle" style="font-size: 12px; color: #5e5e5e; margin-top: 3px;">Nomor Tiket & Instansi</div>
@@ -719,10 +719,10 @@
                     
                     <div style="display: flex; gap: 10px;">
                         <button type="submit" name="hasil_verifikasi" value="PERLU_PERBAIKAN" class="btn-pill-primary" style="font-size: 13px; padding: 8px 18px; background: #d97706; border-color: #d97706;">
-                            ⚠️ Minta Perbaikan Variabel
+                            <i class="fi fi-rr-exclamation"></i> Minta Perbaikan Variabel
                         </button>
                         <button type="submit" name="hasil_verifikasi" value="APPROVE" class="btn-pill-primary" style="font-size: 13px; padding: 8px 20px; background: #166534; border-color: #166534;">
-                            ✅ Approve (Sesuai SE)
+                            <i class="fi fi-rr-check"></i> Approve (Sesuai SE)
                         </button>
                     </div>
                 </div>

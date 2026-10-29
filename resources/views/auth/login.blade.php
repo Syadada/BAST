@@ -48,7 +48,7 @@
 
             <!-- Laptop Device Identification Badge -->
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; margin-bottom: 20px; font-size: 11px; color: #334155; display: flex; align-items: center; justify-content: space-between;">
-                <span>💻 <strong>Nomor Laptop / ID Perangkat:</strong></span>
+                <span><i class="fi fi-rr-laptop" style="color: #0b57d0;"></i> <strong>Nomor Laptop / ID Perangkat:</strong></span>
                 <span id="detectedLaptopId" style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #0b57d0;">
                     Memuat...
                 </span>

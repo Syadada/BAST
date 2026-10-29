@@ -1,8 +1,18 @@
+@import url("https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css");
+
 /* ==========================================================================
-   UNIFIED APPLICATION DESIGN SYSTEM (ONE MASTER STYLESHEET)
-   Theme: Pure White Card (#ffffff), Soft Canvas (#f0f4f9), Crisp Dark Text (#1f1f1f)
-   Zero external or multiple CSS dependencies
+   FLATICON UICONS INTEGRATION & MASTER STYLESHEET
    ========================================================================== */
+
+i.fi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 1;
+    font-size: 1.05em;
+    margin-right: 4px;
+}
 
 :root {
     /* Backgrounds */

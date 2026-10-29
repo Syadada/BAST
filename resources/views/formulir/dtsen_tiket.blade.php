@@ -44,11 +44,11 @@
 
                     @auth
                         <a href="{{ route('profile') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                            👤 Profil & Progress ({{ Auth::user()->isSuperAdmin() ? 'Admin' : 'OPD' }})
+                            <i class="fi fi-rr-user"></i> Profil & Progress ({{ Auth::user()->isSuperAdmin() ? 'Admin' : 'OPD' }})
                         </a>
                         @if(Auth::user()->isSuperAdmin())
                             <a href="{{ route('admin.riwayat') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px; background: #0f172a; color: #fff; border-color: #0f172a;">
-                                ⚙️ Dashboard Admin
+                                <i class="fi fi-rr-settings"></i> Dashboard Admin
                             </a>
                         @endif
                         <form action="{{ route('logout') }}" method="POST" style="display: inline; margin: 0;">
@@ -59,7 +59,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                            🔐 Login Akun OPD / Admin
+                            <i class="fi fi-rr-lock"></i> Login Akun OPD / Admin
                         </a>
                     @endauth
                 </div>
@@ -108,7 +108,7 @@
             <div class="ticket-template-header">
                 <div>
                     <div class="form-badge-system" style="margin-bottom: 8px;">
-                        <span>📋 FORMULIR PENGAJUAN TIKET BAGI PAKAI DTSEN</span>
+                        <span><i class="fi fi-rr-document-signed"></i> FORMULIR PENGAJUAN TIKET BAGI PAKAI DTSEN</span>
                     </div>
                     <h2 style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
                         Template Tiket Permintaan Bagi Pakai Data DTSEN
@@ -309,9 +309,9 @@
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
                             <span class="ticket-tag-chip">{{ $selectedTiket->nomor_tiket }}</span>
                             @if($selectedTiket->status === 'PERLU_PERBAIKAN')
-                                <span class="badge-status pending" style="font-size: 12px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">⚠️ PERLU PERBAIKAN OPD</span>
+                                <span class="badge-status pending" style="font-size: 12px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;"><i class="fi fi-rr-exclamation"></i> PERLU PERBAIKAN OPD</span>
                             @elseif($selectedTiket->step5_done)
-                                <span class="badge-status success" style="font-size: 12px;">✓ SELESAI (SUKSES DIBAGIPAKAIKAN)</span>
+                                <span class="badge-status success" style="font-size: 12px;"><i class="fi fi-rr-check"></i> SELESAI (SUKSES DIBAGIPAKAIKAN)</span>
                             @else
                                 <span class="badge-status pending" style="font-size: 12px;">⏳ SEDANG DIPROSES</span>
                             @endif
@@ -340,13 +340,13 @@
                     <div style="background: #fffbeb; border: 1px solid #fde68a; border-left: 5px solid #d97706; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             <div>
-                                <strong style="color: #92400e; font-size: 14px;">⚠️ Perhatian: Verifikasi Variabel Memerlukan Perbaikan</strong>
+                                <strong style="color: #92400e; font-size: 14px;"><i class="fi fi-rr-exclamation"></i> Perhatian: Verifikasi Variabel Memerlukan Perbaikan</strong>
                                 <div style="font-size: 13px; color: #78350f; margin-top: 4px;">
                                     Catatan Admin: {{ $selectedTiket->catatan_admin }}
                                 </div>
                             </div>
                             <a href="{{ route('profile') }}" class="btn-pill-primary" style="background: #d97706; border-color: #d97706; font-size: 12px; padding: 6px 14px;">
-                                ✏️ Buka Profil untuk Memperbaiki Variabel
+                                <i class="fi fi-rr-edit"></i> Buka Profil untuk Memperbaiki Variabel
                             </a>
                         </div>
                     </div>
@@ -403,7 +403,7 @@
                                     </span>
                                 @elseif($stepNum === 1 && $selectedTiket->status === 'PERLU_PERBAIKAN')
                                     <span class="step-badge-status" style="background: #fffbeb; color: #92400e; border: 1px solid #fde68a;">
-                                        ⚠️ Perlu Perbaikan
+                                        <i class="fi fi-rr-exclamation"></i> Perlu Perbaikan
                                     </span>
                                 @elseif($isActive)
                                     <span class="step-badge-status" style="background: #eaf1fb; color: #0b57d0;">
@@ -535,7 +535,7 @@
                                 </td>
                                 <td style="text-align: right;">
                                     <a href="{{ route('formulir.index', ['track_id' => $t->id]) }}" class="btn-row-action print" style="font-size: 11px;">
-                                        <span>👁️ Pantau Progress</span>
+                                        <span><i class="fi fi-rr-eye"></i> Pantau Progress</span>
                                     </a>
                                 </td>
                             </tr>

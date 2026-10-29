@@ -135,10 +135,10 @@
             <!-- Right Controls -->
             <div class="app-header-right">
                 <a href="{{ route('profile') }}" class="btn-header-link">
-                    <span>👤 Profil Saya</span>
+                    <span><i class="fi fi-rr-user"></i> Profil Saya</span>
                 </a>
                 <a href="{{ route('admin.riwayat') }}" class="btn-header-link">
-                    <span>📋 Manajemen Tiket</span>
+                    <span><i class="fi fi-rr-document"></i> Manajemen Tiket</span>
                 </a>
 
                 <div class="app-user-chip">
@@ -197,28 +197,28 @@
                     <li>
                         <a href="#section-users" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <span>👥 Daftar Akun</span>
+                                <span><i class="fi fi-rr-users"></i> Daftar Akun</span>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="#section-create-user" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <span>➕ Tambah Akun OPD</span>
+                                <span><i class="fi fi-rr-plus"></i> Tambah Akun OPD</span>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="#section-laptop-logs" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <span>💻 Log Nomor Laptop</span>
+                                <span><i class="fi fi-rr-laptop"></i> Log Nomor Laptop</span>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="#section-riwayat-input" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <span>📝 Input Riwayat DTSEN</span>
+                                <span><i class="fi fi-rr-edit"></i> Input Riwayat DTSEN</span>
                             </div>
                         </a>
                     </li>
@@ -379,18 +379,18 @@
                                             @if($u->isSuperAdmin())
                                                 <!-- Clean slate badge (No Red) -->
                                                 <span class="role-badge-super">
-                                                    👑 Super Admin
+                                                    <i class="fi fi-rr-crown"></i> Super Admin
                                                 </span>
                                             @else
                                                 <span class="role-badge-opd">
-                                                    🏢 Perangkat Daerah
+                                                    <i class="fi fi-rr-building"></i> Perangkat Daerah
                                                 </span>
                                             @endif
                                         </td>
                                         <td style="white-space: nowrap;">
                                             @if($u->last_login_device)
                                                 <span class="device-badge" title="Device ID Laptop">
-                                                    💻 {{ $u->last_login_device }}
+                                                    <i class="fi fi-rr-laptop"></i> {{ $u->last_login_device }}
                                                 </span>
                                             @else
                                                 <span style="font-size: 12px; color: #94a3b8; font-style: italic;">Belum pernah login</span>
@@ -448,7 +448,7 @@
                     <div style="margin-bottom: 20px; border-bottom: 1px solid #edf2f7; padding-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <div>
                             <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
-                                ➕ Tambah Akun Perangkat Daerah Baru
+                                <i class="fi fi-rr-plus"></i> Tambah Akun Perangkat Daerah Baru
                             </h2>
                             <p style="font-size: 13px; color: #64748b; margin: 0;">
                                 Buatkan akun untuk instansi dinas/badan/kantor agar dapat mengajukan tiket bagi pakai data dan memantau progress di halaman profile mereka.
@@ -515,7 +515,7 @@
 
                         <div style="display: flex; justify-content: flex-end; gap: 10px;">
                             <button type="submit" class="btn-pill-primary" style="height: 42px; padding: 0 24px;">
-                                💾 Simpan & Terbitkan Akun
+                                <i class="fi fi-rr-disk"></i> Simpan & Terbitkan Akun
                             </button>
                         </div>
                     </form>
@@ -582,7 +582,7 @@
                                                 }
                                             @endphp
                                             <span class="device-badge">
-                                                💻 {{ $laptopId }}
+                                                <i class="fi fi-rr-laptop"></i> {{ $laptopId }}
                                             </span>
                                         </td>
                                         <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #475569; white-space: nowrap;">
@@ -627,7 +627,7 @@
                 <div class="dash-card" id="section-riwayat-input" style="padding: 24px 28px; margin-bottom: 32px;">
                     <div style="margin-bottom: 20px; border-bottom: 1px solid #edf2f7; padding-bottom: 14px;">
                         <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
-                            📝 Input & Terbitkan Riwayat Bagi Pakai Data DTSEN Resmi
+                            <i class="fi fi-rr-edit"></i> Input & Terbitkan Riwayat Bagi Pakai Data DTSEN Resmi
                         </h2>
                         <p style="font-size: 13px; color: #64748b; margin: 0;">
                             Data tabel ini diinput oleh Admin berdasarkan tiket yang telah diverifikasi dan <strong>akan langsung tampil di Profile Page Akun Perangkat Daerah terkait (Read-Only)</strong>.
@@ -641,7 +641,7 @@
                         @if($availableTikets->count() > 0)
                             <div style="background: #f8fafc; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
                                 <label style="display: block; font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">
-                                    💡 Pilih Tiket Masuk untuk Mengisi Otomatis (Opsional):
+                                    <i class="fi fi-rr-bulb"></i> Pilih Tiket Masuk untuk Mengisi Otomatis (Opsional):
                                 </label>
                                 <select id="tiketSelector" class="form-input" style="background: #fff;" onchange="autoFillFromTiket(this)">
                                     <option value="">-- Pilih Tiket DTSEN Terdaftar --</option>
@@ -731,7 +731,7 @@
 
                         <div style="display: flex; justify-content: flex-end;">
                             <button type="submit" class="btn-pill-primary" style="height: 42px; padding: 0 24px;">
-                                🚀 Terbitkan Riwayat ke Profile OPD
+                                <i class="fi fi-rr-paper-plane"></i> Terbitkan Riwayat ke Profile OPD
                             </button>
                         </div>
                     </form>
@@ -785,7 +785,7 @@
                                             </span>
                                         </td>
                                         <td style="font-size: 12px; white-space: nowrap; color: #334155;">
-                                            📅 {{ \Carbon\Carbon::parse($r->tanggal_tiket_dibuat)->format('d/m/Y H:i') }} WIB
+                                            <i class="fi fi-rr-calendar"></i> {{ \Carbon\Carbon::parse($r->tanggal_tiket_dibuat)->format('d/m/Y H:i') }} WIB
                                         </td>
                                         <td>
                                             <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; margin-bottom: 4px;">
@@ -805,11 +805,11 @@
                                         </td>
                                         <td>
                                             <div style="font-size: 12px; font-weight: 600; color: #1e293b; line-height: 1.45;">
-                                                👥 {{ $r->orang_hadir }}
+                                                <i class="fi fi-rr-users"></i> {{ $r->orang_hadir }}
                                             </div>
                                             <div style="margin-top: 6px;">
                                                 <span class="device-badge">
-                                                    💻 {{ $r->ip_atau_nomor_laptop }}
+                                                    <i class="fi fi-rr-laptop"></i> {{ $r->ip_atau_nomor_laptop }}
                                                 </span>
                                             </div>
                                         </td>

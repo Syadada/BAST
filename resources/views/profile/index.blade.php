@@ -69,16 +69,16 @@
                 <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                     @if(!$user->isSuperAdmin())
                         <a href="{{ route('formulir.index') }}" class="btn-pill-primary" style="font-size: 12px; padding: 7px 16px;">
-                            📝 Formulir Tiket Baru
+                            <i class="fi fi-rr-plus"></i> Formulir Tiket Baru
                         </a>
                     @endif
 
                     @if($user->isSuperAdmin())
                         <a href="{{ route('admin.riwayat') }}" class="btn-pill-outline" style="font-size: 12px; padding: 7px 16px;">
-                            👑 Panel Admin
+                            <i class="fi fi-rr-crown"></i> Panel Admin
                         </a>
                         <a href="{{ route('admin.users.index') }}" class="btn-pill-outline" style="font-size: 12px; padding: 7px 16px;">
-                            👥 User & Laptop Log
+                            <i class="fi fi-rr-users"></i> User & Laptop Log
                         </a>
                     @endif
 
@@ -119,15 +119,15 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
                 <div>
                     <div class="form-badge-system" style="margin-bottom: 10px;">
-                        <span>🏢 AKUN PERANGKAT DAERAH (OPD)</span>
+                        <span><i class="fi fi-rr-building"></i> AKUN PERANGKAT DAERAH (OPD)</span>
                     </div>
                     <h1 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
                         {{ $user->nama_instansi ?: $user->name }}
                     </h1>
                     <div style="font-size: 13px; color: #64748b; display: flex; gap: 18px; flex-wrap: wrap; margin-top: 8px;">
-                        <span>👤 PIC: <strong style="color: #1f2937;">{{ $user->name }}</strong></span>
-                        <span>✉️ Email: <strong style="color: #1f2937;">{{ $user->email }}</strong></span>
-                        <span>📞 Kontak: <strong style="color: #1f2937;">{{ $user->nomor_kontak ?: '-' }}</strong></span>
+                        <span><i class="fi fi-rr-user"></i> PIC: <strong style="color: #1f2937;">{{ $user->name }}</strong></span>
+                        <span><i class="fi fi-rr-envelope"></i> Email: <strong style="color: #1f2937;">{{ $user->email }}</strong></span>
+                        <span><i class="fi fi-rr-phone-call"></i> Kontak: <strong style="color: #1f2937;">{{ $user->nomor_kontak ?: '-' }}</strong></span>
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@
                         Perangkat / Laptop Terdaftar Login:
                     </div>
                     <div style="font-size: 14px; font-weight: 700; color: #0f172a; font-family: var(--font-mono); margin-top: 5px; display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
-                        <span>💻</span>
+                        <span><i class="fi fi-rr-laptop"></i></span>
                         <span>{{ $user->last_login_device ?: 'WIN-DEV-OPD01' }}</span>
                     </div>
                     <div style="font-size: 11px; color: #64748b; margin-top: 3px;">
@@ -155,7 +155,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 260px;">
                             <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #92400e; font-size: 15px;">
-                                <span style="font-size: 18px;">⚠️</span>
+                                <span style="font-size: 18px;"><i class="fi fi-rr-exclamation"></i></span>
                                 <span>PERBAIKAN VARIABEL DIPERLUKAN (HASIL VERIFIKASI ADMIN)</span>
                             </div>
                             <div style="font-size: 13px; color: #78350f; margin-top: 6px; line-height: 1.5;">
@@ -168,7 +168,7 @@
                         </div>
                         <div>
                             <button type="button" onclick="toggleRevisiForm()" class="btn-pill-primary" style="background: #d97706; border-color: #d97706; font-size: 13px; padding: 8px 18px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);">
-                                <span>✏️ Perbaiki Variabel Sekarang</span>
+                                <span><i class="fi fi-rr-edit"></i> Perbaiki Variabel Sekarang</span>
                             </button>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                                         Tutup
                                     </button>
                                     <button type="submit" class="btn-pill-primary" style="background: #166534; border-color: #166534; font-size: 12px; padding: 7px 18px;">
-                                        💾 Simpan & Ajukan Ulang ke Admin
+                                        <i class="fi fi-rr-disk"></i> Simpan & Ajukan Ulang ke Admin
                                     </button>
                                 </div>
                             </div>
@@ -221,9 +221,9 @@
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
                         <span class="ticket-tag-chip">{{ $selectedTiket ? $selectedTiket->nomor_tiket : 'TIKET-TERKINI' }}</span>
                         @if($selectedTiket && $selectedTiket->status === 'PERLU_PERBAIKAN')
-                            <span class="badge-status pending" style="font-size: 12px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">⚠️ PERLU PERBAIKAN OPD</span>
+                            <span class="badge-status pending" style="font-size: 12px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;"><i class="fi fi-rr-exclamation"></i> PERLU PERBAIKAN OPD</span>
                         @elseif($selectedTiket && $selectedTiket->step5_done)
-                            <span class="badge-status success" style="font-size: 12px;">✓ SELESAI (100%)</span>
+                            <span class="badge-status success" style="font-size: 12px;"><i class="fi fi-rr-check"></i> SELESAI (100%)</span>
                         @else
                             <span class="badge-status pending" style="font-size: 12px;">⏳ SEDANG DIPROSES</span>
                         @endif
@@ -331,11 +331,11 @@
                     </div>
                     @if(!$user->isSuperAdmin())
                         <a href="{{ route('formulir.index', ['track_id' => $selectedTiket->id]) }}" class="btn-row-action print" style="font-size: 12px;">
-                            <span>👁️ Lihat Detail Tiket Ini</span>
+                            <span><i class="fi fi-rr-eye"></i> Lihat Detail Tiket Ini</span>
                         </a>
                     @else
                         <a href="{{ route('admin.riwayat') }}" class="btn-row-action print" style="font-size: 12px;">
-                            <span>👑 Buka Panel Pengelolaan Admin</span>
+                            <span><i class="fi fi-rr-crown"></i> Buka Panel Pengelolaan Admin</span>
                         </a>
                     @endif
                 </div>
@@ -347,7 +347,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
                 <div>
                     <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 10px;">
-                        <span>📋 Tabel Data Riwayat Bagi Data DTSEN Resmi</span>
+                        <span><i class="fi fi-rr-document"></i> Tabel Data Riwayat Bagi Data DTSEN Resmi</span>
                         <span style="font-size: 11px; font-weight: 700; background: #f0fdf4; color: #166534; padding: 3px 8px; border-radius: 6px; border: 1px solid #bbf7d0;">
                             TERVERIFIKASI
                         </span>
@@ -358,7 +358,7 @@
                 </div>
 
                 <div style="font-size: 11px; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; padding: 7px 14px; border-radius: 8px;">
-                    🔒 <em>Tabel ini diinput resmi oleh Admin dan bersifat Read-Only bagi Perangkat Daerah.</em>
+                    <i class="fi fi-rr-lock"></i> <em>Tabel ini diinput resmi oleh Admin dan bersifat Read-Only bagi Perangkat Daerah.</em>
                 </div>
             </div>
 
@@ -429,7 +429,7 @@
                                         </div>
                                         <div style="border-top: 1px dashed #e2e8f0; padding-top: 6px;">
                                             <span class="device-badge">
-                                                💻 {{ $item->ip_atau_nomor_laptop }}
+                                                <i class="fi fi-rr-laptop"></i> {{ $item->ip_atau_nomor_laptop }}
                                             </span>
                                         </div>
                                     </div>
@@ -438,7 +438,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" style="text-align: center; padding: 48px 20px; color: #64748b;">
-                                    <div style="font-size: 32px; margin-bottom: 10px;">📂</div>
+                                    <div style="font-size: 32px; margin-bottom: 10px; color: #94a3b8;"><i class="fi fi-rr-folder"></i></div>
                                     <div style="font-weight: 700; font-size: 15px; color: #0f172a;">Belum Ada Data Riwayat Bagi Data DTSEN Resmi</div>
                                     <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
                                         Setelah tiket permohonan Anda diselesaikan dan BAST ditandatangani, data resmi akan diinput oleh Admin dan tercatat di sini.

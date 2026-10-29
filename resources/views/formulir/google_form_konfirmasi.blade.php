@@ -82,7 +82,7 @@
                         </div>
                         <div>
                             <span style="color: var(--form-text-muted); font-size: 12px;" data-i18n="confirm_lbl_file">Berkas Terunggah:</span>
-                            <div style="font-weight: 600; color: #1f1f1f; margin-top: 2px;">📎 {{ $kak->nama_file_asli }} ({{ $kak->ukuran_file }})</div>
+                            <div style="font-weight: 600; color: #1f1f1f; margin-top: 2px;"><i class="fi fi-rr-clip"></i> {{ $kak->nama_file_asli }} ({{ $kak->ukuran_file }})</div>
                         </div>
                         <div>
                             <span style="color: var(--form-text-muted); font-size: 12px;" data-i18n="confirm_lbl_date">Tanggal Registrasi:</span>
@@ -93,7 +93,7 @@
                     <!-- Hash Box -->
                     <div style="background: #f8fafd; border: 1px solid #d3e3fd; border-radius: 8px; padding: 12px 14px;">
                         <div style="font-size: 11px; font-weight: 700; color: var(--form-blue-primary); margin-bottom: 4px; text-transform: uppercase;" data-i18n="confirm_lbl_hash">
-                            🛡️ Nilai Kriptografi SHA-256 (Integritas Berkas)
+                            <i class="fi fi-rr-shield-check"></i> Nilai Kriptografi SHA-256 (Integritas Berkas)
                         </div>
                         <div style="font-family: var(--form-font-mono); font-size: 12px; color: #1f1f1f; word-break: break-all; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                             <span id="gHashCode">{{ $kak->hash_sha256 }}</span>
