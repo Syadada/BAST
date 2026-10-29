@@ -1,0 +1,95 @@
+@extends('layouts.opd')
+
+@section('title', 'Dashboard OPD — Layanan Bagi Pakai DTSEN')
+@section('page_title', 'Dashboard')
+@section('page_subtitle', 'Portal Utama Perangkat Daerah')
+
+@section('content')
+<div class="opd-clean-container">
+
+    <!-- Active Ticket Notice (Jika Ada Tiket yang Sedang Berjalan) -->
+    @if($latestTiket)
+        <div class="opd-quick-ticket-banner">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: #eaf1fb; color: #0b57d0; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="fi fi-rr-time-forward"></i>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #64748b; font-weight: 600;">Tiket Permohonan Terakhir:</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #0f172a;">
+                        {{ $latestTiket->nomor_tiket }} 
+                        <span style="font-weight: 500; font-size: 12px; color: #64748b;">(SE: {{ $latestTiket->no_surat_edaran }})</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline" style="font-size: 12px; padding: 7px 16px; background: #ffffff;">
+                    <i class="fi fi-rr-eye"></i> Pantau Progress di Layanan DTSEN &rarr;
+                </a>
+            </div>
+        </div>
+    @endif
+
+    <!-- Clean Hero Card (Fokus Utama: Tombol Buat Tiket Baru) -->
+    <div class="opd-clean-hero-card">
+        <div class="opd-clean-icon-bubble">
+            <i class="fi fi-rr-ticket"></i>
+        </div>
+
+        <div class="opd-clean-instansi">
+            <i class="fi fi-rr-building"></i>
+            <span>{{ $user->nama_instansi ?: $user->name }}</span>
+        </div>
+
+        <h1 class="opd-clean-title">
+            Pengajuan Bagi Pakai Data DTSEN
+        </h1>
+
+        <p class="opd-clean-desc">
+            Selamat datang di Portal Layanan DTSEN. Silakan buat tiket permohonan baru untuk pengajuan data terpadu sosial ekonomi nasional bagi perencanaan program instansi Anda.
+        </p>
+
+        <!-- Aksi Utama: Tombol Buat Tiket Baru -->
+        <div>
+            <a href="{{ route('formulir.index') }}" class="btn-clean-cta" id="btnBuatTiketBaru">
+                <i class="fi fi-rr-plus"></i>
+                <span>Buat Tiket Baru</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Alur Panduan Layanan (3 Langkah Ringkas & Bersih) -->
+    <div>
+        <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; padding-left: 4px;">
+            Alur Layanan Bagi Pakai DTSEN:
+        </div>
+
+        <div class="opd-guide-grid">
+            <div class="opd-guide-card">
+                <div class="opd-guide-number">1</div>
+                <div class="opd-guide-card-title">Ajukan Tiket Baru</div>
+                <div class="opd-guide-card-desc">
+                    Isi formulir dan cantumkan nomor Surat Edaran resmi beserta rincian variabel data yang dibutuhkan.
+                </div>
+            </div>
+
+            <div class="opd-guide-card">
+                <div class="opd-guide-number">2</div>
+                <div class="opd-guide-card-title">Verifikasi Walidata</div>
+                <div class="opd-guide-card-desc">
+                    Admin Walidata memeriksa kesesuaian variabel dan menyiapkan data melalui 5 tahap progress resmi.
+                </div>
+            </div>
+
+            <div class="opd-guide-card">
+                <div class="opd-guide-number">3</div>
+                <div class="opd-guide-card-title">Tanda Tangan BAST</div>
+                <div class="opd-guide-card-desc">
+                    Petugas OPD hadir dengan laptop terdaftar untuk penyerahan data dan penandatanganan Berita Acara (BAST).
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection

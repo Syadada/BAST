@@ -55,9 +55,13 @@ Route::middleware('auth')->group(function () {
     // --- A. PORTAL & DASHBOARD PERANGKAT DAERAH (OPD) ---
     // Diproteksi middleware 'opd' sehingga Admin TIDAK BISA mengakses dengan hanya ganti URL
     Route::middleware('opd')->group(function () {
-        // Dashboard OPD (Profil, Log Laptop, Progress Bar 1..5, Tabel Riwayat Bagi Data)
-        Route::get('/opd/dashboard', [ProfileController::class, 'index'])->name('opd.dashboard');
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile'); // Dukungan alias
+        // 1. Dashboard OPD (Clean Page: Hanya Tombol Buat Tiket Baru & Info Instansi)
+        Route::get('/opd/dashboard', [ProfileController::class, 'dashboard'])->name('opd.dashboard');
+
+        // 2. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
+        Route::get('/opd/layanan-bagi-pakai', [ProfileController::class, 'layananBagiPakai'])->name('opd.layanan-bagi-pakai');
+        Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
+
 
         // Layanan Tiket Permohonan DTSEN & Revisi Variabel
         Route::get('/formulir', [TiketDtsenController::class, 'index'])->name('formulir.index');

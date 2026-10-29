@@ -43,10 +43,14 @@
                     </div>
 
                     @auth
-                        <a href="{{ route('profile') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                            <i class="fi fi-rr-user"></i> Profil & Progress ({{ Auth::user()->isSuperAdmin() ? 'Admin' : 'OPD' }})
-                        </a>
-                        @if(Auth::user()->isSuperAdmin())
+                        @if(!Auth::user()->isSuperAdmin())
+                            <a href="{{ route('opd.dashboard') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
+                                <i class="fi fi-rr-apps"></i> Dashboard OPD
+                            </a>
+                            <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
+                                <i class="fi fi-rr-document"></i> Layanan DTSEN
+                            </a>
+                        @else
                             <a href="{{ route('admin.riwayat') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px; background: #0f172a; color: #fff; border-color: #0f172a;">
                                 <i class="fi fi-rr-settings"></i> Dashboard Admin
                             </a>
