@@ -112,6 +112,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
         
         // Log Laptop & Audit Keamanan
         Route::get('/logs', [UserController::class, 'logsIndex'])->name('logs.index');
+        Route::get('/logs/{id}', [UserController::class, 'logsShow'])->whereNumber('id')->name('logs.show');
         
         // Input & Kelola Tabel Riwayat Bagi Pakai Data DTSEN Resmi
         Route::get('/riwayat-bagi-data/{id}', [UserController::class, 'showRiwayatBagiData'])->whereNumber('id')->name('riwayat-bagi-data.show');

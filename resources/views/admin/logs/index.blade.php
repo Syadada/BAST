@@ -1,6 +1,34 @@
 @extends('layouts.admin')
 
-@section('title', 'Log Laptop & Audit Keamanan — Admin Panel')
+@section('styles')
+<style>
+    .instansi-title-link {
+        font-weight: 700;
+        color: #0b57d0;
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.4;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s ease;
+    }
+    .instansi-title-link:hover {
+        color: #0842a0;
+        text-decoration: underline;
+    }
+    .instansi-title-link .link-arrow {
+        opacity: 0;
+        transform: translateX(-3px);
+        transition: all 0.2s ease;
+        font-size: 11px;
+    }
+    .instansi-title-link:hover .link-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+</style>
+@endsection
 
 @section('content')
 @php
@@ -96,35 +124,40 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="data-table">
+        <div class="table-responsive" style="overflow-x: hidden;">
+            <table class="data-table" style="width: 100%; table-layout: auto;">
                 <thead>
                     <tr>
-                        <th class="table-col-id">ID Log</th>
-                        <th class="table-col-nowrap">Waktu & Tanggal</th>
-                        <th>Akun Pengguna</th>
-                        <th class="table-col-nowrap">Nomor Laptop / Device ID</th>
-                        <th class="table-col-nowrap">Alamat IP</th>
-                        <th class="table-col-nowrap">Status</th>
-                        <th>Aktivitas & Keterangan</th>
+                        <th style="width: 75px;">ID Log</th>
+                        <th style="width: 140px;">Waktu & Tanggal</th>
+                        <th style="min-width: 220px;">Akun Pengguna (Klik untuk Detail)</th>
+                        <th style="min-width: 180px;">Nomor Laptop / Device ID</th>
+                        <th style="width: 130px;">Alamat IP</th>
+                        <th style="width: 140px;">Status</th>
+                        <th style="width: 90px; text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($laptopLogs as $log)
                         <tr>
                             <td class="table-col-id">
-                                #{{ $log->id }}
+                                <a href="{{ route('admin.logs.show', $log->id) }}" style="font-family: var(--font-mono); font-weight: 700; color: #0b57d0; text-decoration: none;" title="Buka Rincian Log #{{ $log->id }}">
+                                    #{{ $log->id }}
+                                </a>
                             </td>
                             <td class="table-col-nowrap">
                                 <div class="user-title-name">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</div>
                                 <div class="user-sub-muted">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }} WIB</div>
                             </td>
                             <td>
-                                <div class="user-title-bold">
-                                    {{ $log->user ? $log->user->username : 'Sistem / Anonim' }}
+                                <div>
+                                    <a href="{{ route('admin.logs.show', $log->id) }}" class="instansi-title-link" title="Klik untuk membuka informasi selengkapnya">
+                                        <span>{{ $log->user ? $log->user->username : ($log->user_name ?: 'Sistem / Anonim') }}</span>
+                                        <i class="fi fi-rr-arrow-up-right link-arrow"></i>
+                                    </a>
                                 </div>
                                 @if($log->user && $log->user->nama_instansi)
-                                    <div class="user-sub-muted">
+                                    <div class="user-sub-muted" style="margin-top: 3px;">
                                         {{ $log->user->nama_instansi }}
                                     </div>
                                 @endif
@@ -136,15 +169,18 @@
                                         $laptopId = $log->device_id;
                                     } elseif (!empty($log->details) && is_array($log->details) && isset($log->details['device_id'])) {
                                         $laptopId = $log->details['device_id'];
+                                    } elseif (!empty($log->device_identifier)) {
+                                        $laptopId = $log->device_identifier;
                                     }
                                 @endphp
                                 @if($laptopId !== '-')
-                                    <span class="device-badge">
+                                    <span class="device-badge" title="Identitas Perangkat Laptop">
                                         <i class="fi fi-rr-laptop"></i>
-                                        {{ $laptopId }}
+                                        <strong>{{ $laptopId }}</strong>
+                                        <span style="font-size: 11px; color: var(--text-muted); margin-left: 4px;">({{ $log->device_os }})</span>
                                     </span>
                                 @else
-                                    <span class="device-badge">
+                                    <span class="device-badge" style="color: var(--text-muted);">
                                         <i class="fi fi-rr-shield-question"></i>
                                         Tidak Terbaca
                                     </span>
@@ -161,15 +197,11 @@
                                     BERHASIL LOGIN
                                 </span>
                             </td>
-                            <td>
-                                <div class="user-title-name">
-                                    {{ $log->description ?: 'Pengguna berhasil masuk ke sistem' }}
-                                </div>
-                                @if($log->user_agent)
-                                    <div class="user-log-sub">
-                                        {{ \Illuminate\Support\Str::limit($log->user_agent, 75) }}
-                                    </div>
-                                @endif
+                            <td style="text-align: right;">
+                                <a href="{{ route('admin.logs.show', $log->id) }}" class="btn-pill-primary" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Lihat Informasi Selengkapnya">
+                                    <span>Detail</span>
+                                    <i class="fi fi-rr-arrow-right"></i>
+                                </a>
                             </td>
                         </tr>
                     @empty
@@ -226,7 +258,11 @@
                 <tbody>
                     @forelse($securityLogs as $log)
                         <tr>
-                            <td class="table-col-id">#{{ $log->id }}</td>
+                            <td class="table-col-id">
+                                <a href="{{ route('admin.logs.show', $log->id) }}" style="color: #0b57d0; font-weight: 700; text-decoration: none;" title="Buka Detail Log #{{ $log->id }}">
+                                    #{{ $log->id }}
+                                </a>
+                            </td>
                             <td class="table-col-nowrap">
                                 <div class="user-title-name">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</div>
                                 <div class="user-sub-muted">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }} WIB</div>
@@ -304,7 +340,11 @@
                 <tbody>
                     @forelse($tiketLogs as $log)
                         <tr>
-                            <td class="table-col-id">#{{ $log->id }}</td>
+                            <td class="table-col-id">
+                                <a href="{{ route('admin.logs.show', $log->id) }}" style="color: #0b57d0; font-weight: 700; text-decoration: none;" title="Buka Detail Log #{{ $log->id }}">
+                                    #{{ $log->id }}
+                                </a>
+                            </td>
                             <td class="table-col-nowrap">
                                 <div class="user-title-name">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</div>
                                 <div class="user-sub-muted">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }} WIB</div>
@@ -379,7 +419,11 @@
                 <tbody>
                     @forelse($allLogs as $log)
                         <tr>
-                            <td class="table-col-id">#{{ $log->id }}</td>
+                            <td class="table-col-id">
+                                <a href="{{ route('admin.logs.show', $log->id) }}" style="color: #0b57d0; font-weight: 700; text-decoration: none;" title="Buka Detail Log #{{ $log->id }}">
+                                    #{{ $log->id }}
+                                </a>
+                            </td>
                             <td class="table-col-nowrap">
                                 <div class="user-title-name">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</div>
                                 <div class="user-sub-muted">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }} WIB</div>

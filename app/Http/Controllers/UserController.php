@@ -258,4 +258,28 @@ class UserController extends Controller
         $riwayat = RiwayatBagiDataDtsen::with(['tiket', 'user'])->findOrFail($id);
         return view('admin.riwayat_bagi_data.show', compact('riwayat'));
     }
+
+    /**
+     * Halaman Detail Log Laptop & Jejak Audit Keamanan Selengkapnya
+     */
+    public function logsShow($id)
+    {
+        $log = AuditLog::with('user')->findOrFail($id);
+
+        // Cari jejak aktivitas terkait pada IP atau User yang sama
+        $relatedLogs = AuditLog::where('id', '!=', $log->id)
+            ->where(function($q) use ($log) {
+                if ($log->ip_address) {
+                    $q->where('ip_address', $log->ip_address);
+                }
+                if ($log->user_id) {
+                    $q->orWhere('user_id', $log->user_id);
+                }
+            })
+            ->latest('created_at')
+            ->take(6)
+            ->get();
+
+        return view('admin.logs.show', compact('log', 'relatedLogs'));
+    }
 }
