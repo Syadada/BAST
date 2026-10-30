@@ -49,6 +49,7 @@ echo.
 echo [PERINGATAN] Python belum terpasang di komputer ini!
 echo [SETUP] Mengunduh dan memasang Python 3.11 otomatis via Windows Winget...
 winget install Python.Python.3.11 --accept-package-agreements --accept-source-agreements --silent
+set "PATH=%LOCALAPPDATA%\Microsoft\WindowsApps;%PATH%"
 where python >nul 2>&1
 if %errorlevel% equ 0 (
     set "PYTHON_EXE=python"
@@ -79,44 +80,74 @@ rem =======================================================================
 echo.
 echo [2/8] Memeriksa Runtime PHP (Frontend Presentation Layer)...
 
+rem Refresh PATH dari Registry & WindowsApps jika ada instalasi baru (misal via winget)
+set "PATH=%LOCALAPPDATA%\Microsoft\WindowsApps;%ProgramFiles%\PHP;%ProgramFiles%\PHP\v8.2;%PATH%"
+for /f "tokens=2*" %%a in ('reg query "HKLM\System\CurrentControlSet\Control\Session Manager\Environment" /v Path 2^>nul') do set "SYS_PATH=%%b"
+for /f "tokens=2*" %%a in ('reg query "HKCU\Environment" /v Path 2^>nul') do set "USER_PATH=%%b"
+if defined SYS_PATH if defined USER_PATH set "PATH=%LOCALAPPDATA%\Microsoft\WindowsApps;!USER_PATH!;!SYS_PATH!;!PATH!"
+
 if exist "%PROJECT_DIR%php\php.exe" (
     set "PHP_EXE=%PROJECT_DIR%php\php.exe"
     set "COMPOSER_PHAR=%PROJECT_DIR%php\composer.phar"
     echo [OK] Menggunakan Local Portable PHP: %PROJECT_DIR%php\php.exe
-    goto :php_ready
+    goto :configure_php_ini
 )
 
-if exist "C:\xampp\php\php.exe" (
-    set "PHP_EXE=C:\xampp\php\php.exe"
-    set "COMPOSER_PHAR=C:\xampp\php\composer.phar"
-    echo [OK] Menggunakan PHP dari XAMPP: C:\xampp\php\php.exe
-    if exist "C:\xampp\php\php.ini" (
-        powershell -NoProfile -Command "(Get-Content 'C:\xampp\php\php.ini') -replace ';extension=intl', 'extension=intl' -replace ';extension=zip', 'extension=zip' -replace ';extension=pdo_sqlite', 'extension=pdo_sqlite' -replace ';extension=sqlite3', 'extension=sqlite3' -replace ';extension=fileinfo', 'extension=fileinfo' -replace ';extension=curl', 'extension=curl' -replace ';extension=gd', 'extension=gd' | Set-Content -Encoding ASCII 'C:\xampp\php\php.ini'" >nul 2>&1
+rem Deteksi PHP di Laragon (C:\ atau D:\)
+for /d %%d in ("C:\laragon\bin\php\php*" "D:\laragon\bin\php\php*") do (
+    if not defined PHP_EXE (
+        if exist "%%~d\php.exe" (
+            set "PHP_EXE=%%~d\php.exe"
+            echo [OK] Menggunakan PHP dari Laragon: %%~d\php.exe
+            goto :configure_php_ini
+        )
     )
-    goto :php_ready
+)
+
+rem Deteksi PHP di XAMPP (C:\ atau D:\)
+for %%d in ("C:\xampp\php" "D:\xampp\php") do (
+    if not defined PHP_EXE (
+        if exist "%%~d\php.exe" (
+            set "PHP_EXE=%%~d\php.exe"
+            set "COMPOSER_PHAR=%%~d\composer.phar"
+            echo [OK] Menggunakan PHP dari XAMPP: %%~d\php.exe
+            goto :configure_php_ini
+        )
+    )
 )
 
 where php >nul 2>&1
 if %errorlevel% equ 0 (
     set "PHP_EXE=php"
     echo [OK] Menggunakan PHP dari System PATH.
-    goto :php_ready
+    goto :configure_php_ini
 )
 
 echo.
 echo [PERINGATAN] PHP belum terpasang di komputer ini!
 echo [SETUP] Mengunduh dan memasang PHP 8.2 otomatis via Windows Winget...
 winget install PHP.PHP.8.2 --accept-package-agreements --accept-source-agreements --silent
+
+rem Refresh PATH setelah winget install selesai
+set "PATH=%LOCALAPPDATA%\Microsoft\WindowsApps;%ProgramFiles%\PHP;%ProgramFiles%\PHP\v8.2;%PATH%"
+for /f "tokens=2*" %%a in ('reg query "HKLM\System\CurrentControlSet\Control\Session Manager\Environment" /v Path 2^>nul') do set "SYS_PATH=%%b"
+for /f "tokens=2*" %%a in ('reg query "HKCU\Environment" /v Path 2^>nul') do set "USER_PATH=%%b"
+if defined SYS_PATH if defined USER_PATH set "PATH=%LOCALAPPDATA%\Microsoft\WindowsApps;!USER_PATH!;!SYS_PATH!;!PATH!"
+
 where php >nul 2>&1
 if %errorlevel% equ 0 (
     set "PHP_EXE=php"
     echo [OK] Instalasi PHP berhasil!
-    goto :php_ready
+    goto :configure_php_ini
 ) else (
-    echo [ERROR] PHP gagal dipasang otomatis. Sediakan folder 'php' portable.
+    echo [ERROR] PHP gagal dipasang otomatis. Sediakan folder 'php' portable atau pasang Laragon/XAMPP.
     pause
     exit /b 1
 )
+
+:configure_php_ini
+echo [INFO] Memverifikasi ekstensi php.ini (SQLite, cURL, Fileinfo, variables_order)...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$cmd = '%PHP_EXE%'; try { $p = & $cmd --ini 2>$null; $ini = ($p | Select-String 'Loaded Configuration File:\s*(.+)').Matches.Groups[1].Value.Trim(); if (-not $ini -or $ini -eq '(none)') { $base = Split-Path (Get-Command $cmd -ErrorAction SilentlyContinue).Source; if (-not $base -and (Test-Path $cmd)) { $base = Split-Path $cmd }; if ($base) { $sample = Get-ChildItem -Path $base -Filter 'php.ini-*' | Select-Object -First 1 -ExpandProperty FullName; if ($sample) { Copy-Item $sample (Join-Path $base 'php.ini'); $ini = Join-Path $base 'php.ini'; } } }; if ($ini -and (Test-Path $ini)) { $c = [System.IO.File]::ReadAllText($ini); $exts = @('pdo_sqlite','sqlite3','fileinfo','curl','gd','zip','intl','mbstring','openssl'); foreach($e in $exts){ $c = $c -replace ';extension='+$e, ('extension='+$e) }; $c = $c -replace ';extension_dir = \"ext\"', 'extension_dir = \"ext\"'; $c = $c -replace 'variables_order = \"GPCS\"', 'variables_order = \"EGPCS\"'; [System.IO.File]::WriteAllText($ini, $c) } } catch {}" >nul 2>&1
 
 :php_ready
 
@@ -271,7 +302,16 @@ echo  ini ke taskbar. Jika jendela ini ditutup (X), maka website akan mati.
 echo  Tekan CTRL+C jika memang ingin menghentikan server secara manual.
 echo =======================================================================
 echo.
-"%PHP_EXE%" artisan serve --host=0.0.0.0 --port=%LARAVEL_PORT%
+"%PHP_EXE%" -d variables_order=EGPCS artisan serve --host=0.0.0.0 --port=%LARAVEL_PORT%
+if %errorlevel% neq 0 (
+    echo.
+    echo [INFO] artisan serve gagal binding 0.0.0.0. Menjalankan fallback web server langsung (server.php)...
+    "%PHP_EXE%" -d variables_order=EGPCS -S 0.0.0.0:%LARAVEL_PORT% "%PROJECT_DIR%server.php"
+    if %errorlevel% neq 0 (
+        echo [INFO] Menjalankan fallback ke localhost 127.0.0.1...
+        "%PHP_EXE%" -d variables_order=EGPCS -S 127.0.0.1:%LARAVEL_PORT% "%PROJECT_DIR%server.php"
+    )
+)
 
 echo.
 echo [INFO] Server Laravel telah dihentikan.
