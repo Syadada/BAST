@@ -31,8 +31,10 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-// Logout Sesi Pengguna
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Logout Sesi Pengguna (Mendukung GET & POST untuk OPD maupun Administrator)
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/opd/logout', [AuthController::class, 'logout']);
+Route::match(['get', 'post'], '/admin/logout', [AuthController::class, 'logout']);
 
 // --- 2. SISTEM TERPROTEKSI (WAJIB LOGIN) & PENCEGAHAN PERUBAHAN URL ---
 Route::middleware(['auth', 'session.timeout'])->group(function () {
@@ -116,4 +118,15 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
         Route::post('/riwayat-bagi-data', [UserController::class, 'storeRiwayatBagiData'])->name('riwayat-bagi-data.store');
         Route::delete('/riwayat-bagi-data/{id}', [UserController::class, 'destroyRiwayatBagiData'])->name('riwayat-bagi-data.destroy');
     });
+});
+
+// --- 3. FALLBACK ROUTE: MENCEGAH ERROR 404 NOT FOUND PADA SELURUH SISTEM ---
+Route::fallback(function () {
+    if (auth()->check()) {
+        if (auth()->user()->isSuperAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('opd.dashboard');
+    }
+    return redirect()->route('login');
 });

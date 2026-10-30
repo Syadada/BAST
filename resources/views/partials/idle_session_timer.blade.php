@@ -24,19 +24,8 @@
         if (idleSeconds >= maxIdleSeconds && !isLoggingOut) {
             isLoggingOut = true;
             
-            // Buat form logout otomatis dan submit ke server
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = logoutUrl;
-
-            var csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
-
-            document.body.appendChild(form);
-            form.submit();
+            // Arahkan langsung ke URL logout (mendukung GET tanpa ketergantungan token CSRF basi)
+            window.location.href = logoutUrl;
         }
     }, 1000);
 })();

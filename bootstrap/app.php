@@ -23,6 +23,15 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         );
 
+        $middleware->validateCsrfTokens(except: [
+            'logout',
+            '/logout',
+            'opd/logout',
+            '/opd/logout',
+            'admin/logout',
+            '/admin/logout',
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminOnly::class,
             'opd' => \App\Http\Middleware\OpdOnly::class,
