@@ -35,7 +35,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // --- 2. SISTEM TERPROTEKSI (WAJIB LOGIN) & PENCEGAHAN PERUBAHAN URL ---
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'session.timeout'])->group(function () {
     
     // Root URL & Dashboard generic: Arahkan ke dashboard masing-masing sesuai peran
     Route::get('/', function () {

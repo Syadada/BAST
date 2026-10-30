@@ -193,7 +193,6 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $wasAdmin = Auth::check() && Auth::user()->isSuperAdmin();
         $userName = Auth::user() ? Auth::user()->name : 'Pengguna';
 
         AuditLogger::log(
@@ -206,11 +205,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        if ($wasAdmin) {
-            return redirect()->route('admin.login')
-                ->with('info', 'Sesi Administrator telah diakhiri dengan aman.');
-        }
-
+        // Admin maupun OPD jika logout selalu dikembalikan ke login page biasa
         return redirect()->route('login')
             ->with('info', 'Anda telah berhasil logout. Sesi telah diakhiri.');
     }

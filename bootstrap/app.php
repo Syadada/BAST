@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminOnly::class,
             'opd' => \App\Http\Middleware\OpdOnly::class,
+            'session.timeout' => \App\Http\Middleware\AutoLogoutTimeout::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

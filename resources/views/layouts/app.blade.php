@@ -119,5 +119,6 @@
     </div>
 
     @yield('scripts')
+    @include('partials.idle_session_timer')
 </body>
 </html>
