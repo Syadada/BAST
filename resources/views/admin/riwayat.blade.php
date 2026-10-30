@@ -310,7 +310,6 @@
                                             <div>
                                                 <a href="{{ route('admin.tiket.show', $item->id) }}" style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Buka Detail Progress Tiket">
                                                     <span>{{ $item->nomor_tiket }}</span>
-                                                    <i class="fi fi-rr-arrow-up-right" style="font-size: 10px;"></i>
                                                 </a>
                                             </div>
                                             <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">

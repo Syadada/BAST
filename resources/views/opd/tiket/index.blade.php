@@ -78,7 +78,6 @@
                             <td>
                                 <a href="{{ route('opd.tiket.show', $t->id) }}" class="ticket-subject-link" title="Klik untuk melihat progress tiket ini">
                                     <span class="ticket-subject-num">#{{ $t->nomor_tiket }}</span>
-                                    <i class="fi fi-rr-arrow-up-right icon-size-11"></i>
                                 </a>
                                 <span class="ticket-subject-subtitle">
                                     SE: <strong>{{ $t->no_surat_edaran }}</strong> | {{ count($t->variabel_dtsen ?? []) }} Variabel
