@@ -249,4 +249,13 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index', ['tab' => 'riwayat-terbit'])->with('success', "Data Riwayat Bagi Data DTSEN untuk [{$instansi}] berhasil dihapus.");
     }
+
+    /**
+     * Halaman Detail Riwayat Bagi Data DTSEN Resmi (Sisi Super Admin)
+     */
+    public function showRiwayatBagiData($id)
+    {
+        $riwayat = RiwayatBagiDataDtsen::with(['tiket', 'user'])->findOrFail($id);
+        return view('admin.riwayat_bagi_data.show', compact('riwayat'));
+    }
 }

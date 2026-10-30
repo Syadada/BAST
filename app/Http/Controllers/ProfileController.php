@@ -124,6 +124,27 @@ class ProfileController extends Controller
     }
 
     /**
+     * 5. Halaman Detail Riwayat Bagi Data DTSEN Resmi (Sisi OPD)
+     */
+    public function showRiwayatBagiData($id)
+    {
+        $user = Auth::user();
+        $namaInstansi = $user->nama_instansi ?: $user->name;
+
+        $riwayat = RiwayatBagiDataDtsen::with(['tiket', 'user'])
+            ->where('id', $id)
+            ->where(function ($q) use ($user, $namaInstansi) {
+                if (!$user->isSuperAdmin()) {
+                    $q->where('user_id', $user->id)
+                      ->orWhere('nama_instansi', 'like', '%' . $namaInstansi . '%');
+                }
+            })
+            ->firstOrFail();
+
+        return view('opd.riwayat_bagi_data.show', compact('user', 'riwayat'));
+    }
+
+    /**
      * Alias untuk rute lama /profile agar kompatibel
      */
     public function index()

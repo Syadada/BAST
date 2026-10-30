@@ -426,11 +426,12 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="user-title-name">
-                                    {{ $r->no_surat_edaran ?: '-' }}
-                                </div>
+                                <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="badge-se-clickable" title="Buka Detail Berita Acara, Petugas Hadir & Laptop">
+                                    <i class="fi fi-rr-document"></i>
+                                    <span>{{ $r->no_surat_edaran ?: '-' }}</span>
+                                </a>
                                 @if($r->no_bast)
-                                    <div class="user-sub-muted">
+                                    <div class="user-sub-muted" style="margin-top: 4px;">
                                         BAST: {{ $r->no_bast }}
                                     </div>
                                 @endif
@@ -466,13 +467,18 @@
                                 </span>
                             </td>
                             <td class="table-col-action">
-                                <form action="{{ route('admin.riwayat-bagi-data.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat bagi pakai ini? Data di profil OPD juga akan terhapus.');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="table-btn-delete" title="Hapus Riwayat">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
-                                </form>
+                                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                                    <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="table-btn-view" title="Lihat Detail Riwayat & Perangkat">
+                                        <i class="fi fi-rr-eye"></i>
+                                    </a>
+                                    <form action="{{ route('admin.riwayat-bagi-data.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat bagi pakai ini? Data di profil OPD juga akan terhapus.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="table-btn-delete" title="Hapus Riwayat">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

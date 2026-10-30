@@ -366,11 +366,11 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th style="min-width: 200px;">1. Nama Instansi</th>
-                            <th style="min-width: 170px;">2. Surat Edaran</th>
-                            <th style="min-width: 160px; white-space: nowrap;">3. Waktu Tiket Dibuat</th>
-                            <th style="min-width: 220px;">4. Tanda Tangan BAST / Proses Selesai</th>
-                            <th style="min-width: 280px;">5. Orang OPD Hadir & Nomor Laptop</th>
+                            <th style="min-width: 220px;">1. Nama Instansi</th>
+                            <th style="min-width: 220px;">2. Surat Edaran (Klik untuk Detail)</th>
+                            <th style="min-width: 150px; white-space: nowrap;">3. Waktu Tiket Dibuat</th>
+                            <th style="min-width: 220px;">4. Status & Nomor BAST</th>
+                            <th style="text-align: right; min-width: 130px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -383,16 +383,20 @@
                                     </div>
                                     @if($item->tiket)
                                         <div style="font-size: 11px; color: #64748b; font-family: var(--font-mono); margin-top: 2px;">
-                                            Ref Tiket: #{{ $item->tiket->nomor_tiket }}
+                                            Ref Tiket: <a href="{{ route('opd.tiket.show', $item->tiket->id) }}" style="color: #0b57d0; text-decoration: none; font-weight: 600;">#{{ $item->tiket->nomor_tiket }}</a>
                                         </div>
                                     @endif
                                 </td>
 
-                                <!-- 2. Surat Edaran -->
+                                <!-- 2. Surat Edaran (CLICKABLE KE PAGE BARU) -->
                                 <td>
-                                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: #334155; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        {{ $item->no_surat_edaran }}
-                                    </span>
+                                    <a href="{{ route('opd.riwayat-bagi-data.show', $item->id) }}" class="badge-se-clickable" title="Klik untuk membuka detail lengkap Surat Edaran, Petugas Hadir & Laptop">
+                                        <i class="fi fi-rr-document"></i>
+                                        <span>{{ $item->no_surat_edaran }}</span>
+                                    </a>
+                                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+                                        Klik untuk rincian lengkap & perangkat &rarr;
+                                    </div>
                                 </td>
 
                                 <!-- 3. Tanggal dan Waktu Tiket Dibuat -->
@@ -418,21 +422,12 @@
                                     </div>
                                 </td>
 
-                                <!-- 5. Orang Perangkat Daerah yang Hadir beserta IP atau Nomor Laptop -->
-                                <td>
-                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; font-size: 12px; line-height: 1.45;">
-                                        <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">
-                                            Daftar Hadir Perangkat Daerah:
-                                        </div>
-                                        <div style="white-space: pre-line; color: #475569; margin-bottom: 8px;">
-                                            {{ $item->orang_hadir }}
-                                        </div>
-                                        <div style="border-top: 1px dashed #e2e8f0; padding-top: 6px;">
-                                            <span class="device-badge">
-                                                <i class="fi fi-rr-laptop"></i> {{ $item->ip_atau_nomor_laptop }}
-                                            </span>
-                                        </div>
-                                    </div>
+                                <!-- 5. Aksi Detail Link -->
+                                <td style="text-align: right;">
+                                    <a href="{{ route('opd.riwayat-bagi-data.show', $item->id) }}" class="btn-pill-primary" style="padding: 6px 14px; font-size: 12px; text-decoration: none;" title="Buka Detail">
+                                        <span>Detail</span>
+                                        <i class="fi fi-rr-arrow-right"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @empty

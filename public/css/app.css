@@ -3386,6 +3386,31 @@ nav[role="navigation"] svg,
     border: 1px solid #e2e8f0;
 }
 
+.badge-se-clickable {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0b57d0;
+    background: #eff6ff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #bfdbfe;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.badge-se-clickable:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #93c5fd;
+    box-shadow: 0 2px 6px rgba(11, 87, 208, 0.15);
+    transform: translateY(-1px);
+}
+
 /* Dashboard Quick Banner & Guide Headings */
 .quick-banner-left {
     display: flex;

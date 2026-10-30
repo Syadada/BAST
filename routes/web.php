@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
 
         // 4. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
         Route::get('/opd/layanan-bagi-pakai', [ProfileController::class, 'layananBagiPakai'])->name('opd.layanan-bagi-pakai');
+        Route::get('/opd/riwayat-bagi-data/{id}', [ProfileController::class, 'showRiwayatBagiData'])->whereNumber('id')->name('opd.riwayat-bagi-data.show');
         Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
 
         // 5. Unduh Surat & Revisi Variabel
@@ -111,6 +112,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [UserController::class, 'logsIndex'])->name('logs.index');
         
         // Input & Kelola Tabel Riwayat Bagi Pakai Data DTSEN Resmi
+        Route::get('/riwayat-bagi-data/{id}', [UserController::class, 'showRiwayatBagiData'])->whereNumber('id')->name('riwayat-bagi-data.show');
         Route::post('/riwayat-bagi-data', [UserController::class, 'storeRiwayatBagiData'])->name('riwayat-bagi-data.store');
         Route::delete('/riwayat-bagi-data/{id}', [UserController::class, 'destroyRiwayatBagiData'])->name('riwayat-bagi-data.destroy');
     });
