@@ -237,8 +237,9 @@ echo  - OPD Dinsos     : dinsos / dinsos123
 echo  - OPD Bappeda    : bappeda / bappeda123
 echo =======================================================================
 echo.
-echo [7/8] Membuka peramban browser otomatis...
-powershell -Command "Start-Process 'http://127.0.0.1:8080/'"
+echo [7/8] Menyiapkan pembukaan peramban browser otomatis...
+rem Menjalankan pengecekan socket di background agar browser baru terbuka saat server sudah benar-benar siap (mencegah error perlu di-refresh)
+start /b powershell -WindowStyle Hidden -Command "$ready = $false; for ($i=0; $i -lt 30; $i++) { try { $tcp = New-Object Net.Sockets.TcpClient('127.0.0.1', 8080); if ($tcp.Connected) { $tcp.Close(); $ready = $true; break; } } catch {} Start-Sleep -Milliseconds 300; }; Start-Process 'http://127.0.0.1:8080/'"
 
 echo [8/8] Server aktif di port 8080 (0.0.0.0). Tekan CTRL+C untuk berhenti.
 echo.
