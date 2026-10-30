@@ -261,9 +261,9 @@ echo  - OPD Bappeda    : bappeda / bappeda123
 echo =======================================================================
 echo.
 
-echo [7/8] Menyiapkan pembukaan peramban browser otomatis...
-rem Menjalankan peluncuran browser pada proses terpisah ke port yang aktif (TIDAK menyentuh atau menutup jendela CMD)
-start "" powershell -NoProfile -Command "Start-Sleep -Seconds 2; Start-Process 'http://127.0.0.1:%LARAVEL_PORT%/'"
+echo [7/8] Menyiapkan peluncur peramban cerdas (menunggu port %LARAVEL_PORT% aktif)...
+rem Socket poller: Memeriksa koneksi TCP port secara berulang sampai server benar-benar siap merespons sebelum membuka browser
+start "" /min powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = %LARAVEL_PORT%; for ($i = 0; $i -lt 50; $i++) { try { $client = New-Object System.Net.Sockets.TcpClient('127.0.0.1', $p); if ($client.Connected) { $client.Close(); break; } } catch {} Start-Sleep -Milliseconds 250; }; Start-Process ('http://127.0.0.1:' + $p + '/login')"
 
 echo [8/8] SERVER SEDANG AKTIF DI PORT %LARAVEL_PORT% (0.0.0.0)...
 echo.
