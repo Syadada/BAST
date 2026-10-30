@@ -237,9 +237,14 @@ echo  - OPD Dinsos     : dinsos / dinsos123
 echo  - OPD Bappeda    : bappeda / bappeda123
 echo =======================================================================
 echo.
+rem Membebaskan port 8080 jika ada proses PHP lama yang masih menggantung
+for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8080 " ^| findstr "LISTENING"') do (
+    taskkill /f /pid %%a >nul 2>&1
+)
+
 echo [7/8] Menyiapkan pembukaan peramban browser otomatis...
-rem Menjalankan pengecekan socket di background agar browser baru terbuka saat server sudah benar-benar siap (mencegah error perlu di-refresh)
-start /b powershell -WindowStyle Hidden -Command "$ready = $false; for ($i=0; $i -lt 30; $i++) { try { $tcp = New-Object Net.Sockets.TcpClient('127.0.0.1', 8080); if ($tcp.Connected) { $tcp.Close(); $ready = $true; break; } } catch {} Start-Sleep -Milliseconds 300; }; Start-Process 'http://127.0.0.1:8080/'"
+rem Menjalankan peluncuran browser pada proses terpisah dengan jeda 2 detik (TIDAK menutup atau menyembunyikan jendela CMD utama)
+start "" powershell -NoProfile -Command "Start-Sleep -Seconds 2; Start-Process 'http://127.0.0.1:8080/'"
 
 echo [8/8] SERVER SEDANG AKTIF DI PORT 8080 (0.0.0.0)...
 echo.
