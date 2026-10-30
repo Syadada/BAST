@@ -1,6 +1,34 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen Pengguna — Admin Panel')
+@section('styles')
+<style>
+    .instansi-title-link {
+        font-weight: 700;
+        color: #0b57d0;
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.4;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s ease;
+    }
+    .instansi-title-link:hover {
+        color: #0842a0;
+        text-decoration: underline;
+    }
+    .instansi-title-link .link-arrow {
+        opacity: 0;
+        transform: translateX(-3px);
+        transition: all 0.2s ease;
+        font-size: 11px;
+    }
+    .instansi-title-link:hover .link-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+</style>
+@endsection
 
 @section('content')
 <div class="page-top-bar">
@@ -395,18 +423,16 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="data-table">
+        <div class="table-responsive" style="overflow-x: hidden;">
+            <table class="data-table" style="width: 100%; table-layout: auto;">
                 <thead>
                     <tr>
-                        <th class="table-col-id">No</th>
-                        <th>1. Nama Perangkat Daerah</th>
-                        <th>2. No Surat Edaran / Dasar</th>
-                        <th class="table-col-nowrap">3. Tanggal Tiket Dibuat</th>
-                        <th class="table-col-nowrap">4. TTD BAST / Selesai</th>
-                        <th>5. Orang Hadir & Laptop / IP</th>
-                        <th class="table-col-nowrap">Status BAST</th>
-                        <th class="table-col-action">Aksi</th>
+                        <th style="width: 60px;">No</th>
+                        <th style="min-width: 240px;">Nama Perangkat Daerah (Klik untuk Detail)</th>
+                        <th style="min-width: 200px;">No. Surat Edaran & BAST</th>
+                        <th style="width: 160px;">Tanggal Selesai BAST</th>
+                        <th style="width: 130px;">Status BAST</th>
+                        <th style="width: 130px; text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -416,32 +442,29 @@
                                 {{ $riwayatBagiDatas->firstItem() + $idx }}
                             </td>
                             <td>
-                                <div class="user-title-bold">
-                                    {{ $r->nama_instansi }}
+                                <div>
+                                    <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="instansi-title-link" title="Buka Detail Berita Acara, Petugas Hadir & Laptop">
+                                        <span>{{ $r->nama_instansi }}</span>
+                                        <i class="fi fi-rr-arrow-up-right link-arrow"></i>
+                                    </a>
                                 </div>
                                 @if($r->tiket_dtsen_id)
-                                    <div class="user-sub-muted">
-                                        Tiket Terkait: #{{ $r->tiket_dtsen_id }}
+                                    <div class="user-sub-muted" style="margin-top: 3px;">
+                                        Tiket Terkait: <a href="{{ route('admin.tiket.show', $r->tiket_dtsen_id) }}" style="color: #0b57d0; text-decoration: none; font-weight: 600;">#{{ $r->tiket_dtsen_id }}</a>
                                     </div>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="badge-se-clickable" title="Buka Detail Berita Acara, Petugas Hadir & Laptop">
-                                    <i class="fi fi-rr-document"></i>
-                                    <span>{{ $r->no_surat_edaran ?: '-' }}</span>
-                                </a>
+                                <div>
+                                    <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="badge-se-clickable" title="Buka Detail Berita Acara">
+                                        <i class="fi fi-rr-document"></i>
+                                        <span>{{ $r->no_surat_edaran ?: '-' }}</span>
+                                    </a>
+                                </div>
                                 @if($r->no_bast)
-                                    <div class="user-sub-muted" style="margin-top: 4px;">
-                                        BAST: {{ $r->no_bast }}
+                                    <div class="user-sub-muted" style="margin-top: 4px; font-family: var(--font-mono); font-size: 11px;">
+                                        BAST: <strong>{{ $r->no_bast }}</strong>
                                     </div>
-                                @endif
-                            </td>
-                            <td class="table-col-nowrap">
-                                @if($r->tanggal_tiket_dibuat)
-                                    <div class="user-title-name">{{ \Carbon\Carbon::parse($r->tanggal_tiket_dibuat)->format('d M Y') }}</div>
-                                    <div class="user-sub-muted">{{ \Carbon\Carbon::parse($r->tanggal_tiket_dibuat)->format('H:i') }} WIB</div>
-                                @else
-                                    <span class="user-sub-muted">-</span>
                                 @endif
                             </td>
                             <td class="table-col-nowrap">
@@ -452,29 +475,22 @@
                                     <span class="user-sub-muted">Dalam Proses</span>
                                 @endif
                             </td>
-                            <td>
-                                <div class="user-title-name">
-                                    {{ $r->orang_hadir ?: '-' }}
-                                </div>
-                                <div class="user-sub-muted">
-                                    Perangkat: <span class="device-badge">{{ $r->ip_atau_nomor_laptop ?: '-' }}</span>
-                                </div>
-                            </td>
                             <td class="table-col-nowrap">
                                 <span class="role-badge-opd">
                                     <i class="fi fi-rr-check-circle"></i>
                                     {{ $r->status_bast }}
                                 </span>
                             </td>
-                            <td class="table-col-action">
-                                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
-                                    <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="table-btn-view" title="Lihat Detail Riwayat & Perangkat">
-                                        <i class="fi fi-rr-eye"></i>
+                            <td style="text-align: right;">
+                                <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                                    <a href="{{ route('admin.riwayat-bagi-data.show', $r->id) }}" class="btn-pill-primary" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Lihat Detail Riwayat & Perangkat">
+                                        <span>Detail</span>
+                                        <i class="fi fi-rr-arrow-right"></i>
                                     </a>
-                                    <form action="{{ route('admin.riwayat-bagi-data.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat bagi pakai ini? Data di profil OPD juga akan terhapus.');">
+                                    <form action="{{ route('admin.riwayat-bagi-data.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat bagi pakai ini? Data di profil OPD juga akan terhapus.');" style="margin: 0; display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="table-btn-delete" title="Hapus Riwayat">
+                                        <button type="submit" class="table-btn-delete" style="padding: 5px 8px;" title="Hapus Riwayat">
                                             <i class="fi fi-rr-trash"></i>
                                         </button>
                                     </form>
@@ -483,7 +499,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="table-empty-box">
+                            <td colspan="6" class="table-empty-box">
                                 <div class="table-empty-icon">
                                     <i class="fi fi-rr-document-signed"></i>
                                 </div>
