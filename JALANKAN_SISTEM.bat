@@ -302,7 +302,7 @@ echo  ini ke taskbar. Jika jendela ini ditutup (X), maka website akan mati.
 echo  Tekan CTRL+C jika memang ingin menghentikan server secara manual.
 echo =======================================================================
 echo.
-"%PHP_EXE%" -d variables_order=EGPCS artisan serve --host=0.0.0.0 --port=%LARAVEL_PORT%
+"%PHP_EXE%" -d variables_order=EGPCS artisan serve --host=0.0.0.0 --port=%LARAVEL_PORT% --no-reload
 if %errorlevel% neq 0 (
     echo.
     echo [INFO] artisan serve gagal binding 0.0.0.0. Menjalankan fallback web server langsung (server.php)...
