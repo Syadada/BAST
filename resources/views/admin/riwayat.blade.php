@@ -169,25 +169,25 @@
                 <div class="dash-metric-grid">
                     <div class="dash-metric-card">
                         <div class="dash-metric-label">Total Tiket Masuk</div>
-                        <div class="dash-metric-value">{{ number_format($totalTiket) }}</div>
+                        <div class="dash-metric-value">{{ number_format($totalTiket ?? 0) }}</div>
                         <div class="dash-metric-sub">Seluruh permohonan instansi</div>
                     </div>
 
                     <div class="dash-metric-card">
                         <div class="dash-metric-label">Sedang Diproses</div>
-                        <div class="dash-metric-value" style="color: var(--blue-primary);">{{ number_format($totalDiproses) }}</div>
+                        <div class="dash-metric-value" style="color: var(--blue-primary);">{{ number_format($totalDiproses ?? 0) }}</div>
                         <div class="dash-metric-sub">Menunggu verifikasi / tahapan aktif</div>
                     </div>
 
                     <div class="dash-metric-card">
                         <div class="dash-metric-label">Selesai Dibagipakaikan</div>
-                        <div class="dash-metric-value" style="color: var(--green-primary);">{{ number_format($totalSelesai) }}</div>
+                        <div class="dash-metric-value" style="color: var(--green-primary);">{{ number_format($totalSelesai ?? 0) }}</div>
                         <div class="dash-metric-sub">Tahap 1 - 5 selesai 100%</div>
                     </div>
 
                     <div class="dash-metric-card">
                         <div class="dash-metric-label">Tiket Hari Ini</div>
-                        <div class="dash-metric-value" style="color: var(--purple-primary);">{{ number_format($totalHariIni) }}</div>
+                        <div class="dash-metric-value" style="color: var(--purple-primary);">{{ number_format($totalHariIni ?? 0) }}</div>
                         <div class="dash-metric-sub">Dalam 24 jam terakhir</div>
                     </div>
                 </div>
@@ -225,7 +225,7 @@
                                 </label>
                                 <select name="instansi" class="form-input" style="height: 40px; font-size: 13px;">
                                     <option value="">Semua Instansi</option>
-                                    @foreach($instansis as $ins)
+                                    @foreach(($instansis ?? []) as $ins)
                                         <option value="{{ $ins }}" {{ request('instansi') == $ins ? 'selected' : '' }}>{{ $ins }}</option>
                                     @endforeach
                                 </select>
@@ -276,7 +276,7 @@
                             </p>
                         </div>
                         <span class="dash-card-count">
-                            Total: {{ $tikets->total() }} Tiket
+                            Total: {{ isset($tikets) && method_exists($tikets, 'total') ? $tikets->total() : (is_countable($tikets ?? null) ? count($tikets) : 0) }} Tiket
                         </span>
                     </div>
 
@@ -293,7 +293,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($tikets as $item)
+                                @forelse(($tikets ?? []) as $item)
                                     @php
                                         // Cari step aktif saat ini yang belum OK
                                         $activeStepNum = 1;
@@ -485,9 +485,11 @@
                         </table>
                     </div>
 
+                    @if(isset($tikets) && method_exists($tikets, 'links'))
                     <div class="dash-pagination">
                         {{ $tikets->links() }}
                     </div>
+                    @endif
                 </div>
 
                 <!-- Audit Log Section -->
@@ -519,7 +521,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($auditLogs as $log)
+                                @forelse(($auditLogs ?? []) as $log)
                                     <tr>
                                         <td style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
                                             {{ date('d/m/Y H:i:s', strtotime($log->created_at)) }}
@@ -563,9 +565,11 @@
                         </table>
                     </div>
 
+                    @if(isset($auditLogs) && method_exists($auditLogs, 'links'))
                     <div class="dash-pagination">
                         {{ $auditLogs->links() }}
                     </div>
+                    @endif
                 </div>
 
             </main>

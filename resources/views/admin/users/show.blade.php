@@ -168,7 +168,7 @@
                 </h2>
             </div>
             <div class="admin-card-header-sub">
-                Total {{ $userTikets->count() }} tiket diajukan
+                Total {{ count($userTikets ?? []) }} tiket diajukan
             </div>
         </div>
 
@@ -184,7 +184,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($userTikets as $t)
+                    @forelse(($userTikets ?? []) as $t)
                         <tr>
                             <td class="table-col-id">
                                 <a href="{{ route('admin.tiket.show', $t->id) }}" class="user-subject-link" title="Buka Detail Tiket">
@@ -255,7 +255,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($userLogs as $log)
+                    @forelse(($userLogs ?? []) as $log)
                         <tr>
                             <td class="table-col-id">#{{ $log->id }}</td>
                             <td class="table-col-nowrap">

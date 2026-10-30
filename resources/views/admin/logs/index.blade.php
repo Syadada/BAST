@@ -3,6 +3,13 @@
 @section('title', 'Log Laptop & Audit Keamanan — Admin Panel')
 
 @section('content')
+@php
+    $activeTab = $activeTab ?? 'laptop';
+    $laptopLogs = $laptopLogs ?? collect([]);
+    $securityLogs = $securityLogs ?? collect([]);
+    $tiketLogs = $tiketLogs ?? collect([]);
+    $allLogs = $allLogs ?? collect([]);
+@endphp
 <div class="page-top-bar">
     <div>
         <h1 class="page-top-title">
@@ -25,22 +32,22 @@
 <div class="admin-stats-grid">
     <div class="admin-stat-card">
         <div class="admin-stat-label">Total Log Aktivitas</div>
-        <div class="admin-stat-val admin-stat-val-blue">{{ number_format($totalLogs, 0, ',', '.') }}</div>
+        <div class="admin-stat-val admin-stat-val-blue">{{ number_format($totalLogs ?? 0, 0, ',', '.') }}</div>
         <div class="admin-stat-sub">Seluruh jejak autentikasi tersimpan</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-label">Laptop / Device Terdeteksi</div>
-        <div class="admin-stat-val admin-stat-val-green">{{ number_format($uniqueDevices, 0, ',', '.') }}</div>
+        <div class="admin-stat-val admin-stat-val-green">{{ number_format($uniqueDevices ?? 0, 0, ',', '.') }}</div>
         <div class="admin-stat-sub">Nomor identitas unik perangkat</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-label">Login Hari Ini</div>
-        <div class="admin-stat-val admin-stat-val-purple">{{ number_format($todayLogs, 0, ',', '.') }}</div>
+        <div class="admin-stat-val admin-stat-val-purple">{{ number_format($todayLogs ?? 0, 0, ',', '.') }}</div>
         <div class="admin-stat-sub">Sesi masuk aktif hari ini</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-label">Peringatan Keamanan</div>
-        <div class="admin-stat-val admin-stat-val-amber">{{ number_format($securityAlerts, 0, ',', '.') }}</div>
+        <div class="admin-stat-val admin-stat-val-amber">{{ number_format($securityAlerts ?? 0, 0, ',', '.') }}</div>
         <div class="admin-stat-sub">Akses tidak sah & gagal masuk</div>
     </div>
 </div>
@@ -50,25 +57,25 @@
     <button type="button" class="sub-page-tab-item {{ $activeTab === 'laptop' ? 'active' : '' }}" onclick="switchLogTab('laptop')" id="btn-tab-laptop">
         <i class="fi fi-rr-laptop sub-page-tab-icon"></i>
         <span>Log Perangkat Laptop</span>
-        <span class="sub-page-tab-count">{{ $laptopLogs->total() }}</span>
+        <span class="sub-page-tab-count">{{ method_exists($laptopLogs, 'total') ? $laptopLogs->total() : count($laptopLogs) }}</span>
     </button>
 
     <button type="button" class="sub-page-tab-item {{ $activeTab === 'keamanan' ? 'active' : '' }}" onclick="switchLogTab('keamanan')" id="btn-tab-keamanan">
         <i class="fi fi-rr-shield-exclamation sub-page-tab-icon"></i>
         <span>Keamanan & Akses Ditolak</span>
-        <span class="sub-page-tab-count">{{ $securityLogs->total() }}</span>
+        <span class="sub-page-tab-count">{{ method_exists($securityLogs, 'total') ? $securityLogs->total() : count($securityLogs) }}</span>
     </button>
 
     <button type="button" class="sub-page-tab-item {{ $activeTab === 'tiket' ? 'active' : '' }}" onclick="switchLogTab('tiket')" id="btn-tab-tiket">
         <i class="fi fi-rr-ticket sub-page-tab-icon"></i>
         <span>Aktivitas Tiket & Approval</span>
-        <span class="sub-page-tab-count">{{ $tiketLogs->total() }}</span>
+        <span class="sub-page-tab-count">{{ method_exists($tiketLogs, 'total') ? $tiketLogs->total() : count($tiketLogs) }}</span>
     </button>
 
     <button type="button" class="sub-page-tab-item {{ $activeTab === 'semua' ? 'active' : '' }}" onclick="switchLogTab('semua')" id="btn-tab-semua">
         <i class="fi fi-rr-list-check sub-page-tab-icon"></i>
         <span>Semua Jejak Audit</span>
-        <span class="sub-page-tab-count">{{ $allLogs->total() }}</span>
+        <span class="sub-page-tab-count">{{ method_exists($allLogs, 'total') ? $allLogs->total() : count($allLogs) }}</span>
     </button>
 </div>
 
@@ -179,7 +186,7 @@
             </table>
         </div>
 
-        @if($laptopLogs->hasPages())
+        @if(method_exists($laptopLogs, 'hasPages') && $laptopLogs->hasPages())
             <div class="admin-card-pagination">
                 {{ $laptopLogs->links() }}
             </div>
@@ -257,7 +264,7 @@
             </table>
         </div>
 
-        @if($securityLogs->hasPages())
+        @if(method_exists($securityLogs, 'hasPages') && $securityLogs->hasPages())
             <div class="admin-card-pagination">
                 {{ $securityLogs->links() }}
             </div>
@@ -332,7 +339,7 @@
             </table>
         </div>
 
-        @if($tiketLogs->hasPages())
+        @if(method_exists($tiketLogs, 'hasPages') && $tiketLogs->hasPages())
             <div class="admin-card-pagination">
                 {{ $tiketLogs->links() }}
             </div>
@@ -404,7 +411,7 @@
             </table>
         </div>
 
-        @if($allLogs->hasPages())
+        @if(method_exists($allLogs, 'hasPages') && $allLogs->hasPages())
             <div class="admin-card-pagination">
                 {{ $allLogs->links() }}
             </div>
