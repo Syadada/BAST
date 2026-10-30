@@ -222,6 +222,7 @@
                 <!-- Filter & Search Bar Tiket DTSEN -->
                 <div class="dash-filter-card">
                     <form method="GET" action="{{ route('admin.riwayat') }}">
+                        <input type="hidden" name="filter" value="1">
                         <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; align-items: flex-end;">
                             <div style="flex: 2; min-width: 260px;">
                                 <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
@@ -299,11 +300,19 @@
                                 <span>Daftar Tiket Permintaan Bagi Pakai DTSEN</span>
                             </h2>
                             <p class="dash-card-subtitle">
-                                Rekapitulasi data entry tiket permohonan. Klik pada <strong>Nama Instansi</strong> untuk membuka halaman baru dengan informasi selengkapnya.
+                                @if(!empty($filterApplied))
+                                    Rekapitulasi data entry tiket permohonan hasil filter. Klik pada <strong>Nama Instansi</strong> untuk membuka halaman baru dengan informasi selengkapnya.
+                                @else
+                                    Data tiket dikosongkan secara default. Gunakan formulir filter di atas lalu klik <strong>Terapkan Filter</strong> untuk memunculkan data.
+                                @endif
                             </p>
                         </div>
                         <span class="dash-card-count">
-                            Total: {{ isset($tikets) && method_exists($tikets, 'total') ? $tikets->total() : (is_countable($tikets ?? null) ? count($tikets) : 0) }} Tiket
+                            @if(!empty($filterApplied))
+                                Ditemukan: {{ isset($tikets) && method_exists($tikets, 'total') ? $tikets->total() : (is_countable($tikets ?? null) ? count($tikets) : 0) }} Tiket
+                            @else
+                                Status: Menunggu Filter
+                            @endif
                         </span>
                     </div>
 
@@ -445,13 +454,32 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="6" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
-                                            <div style="font-size: 32px; margin-bottom: 10px; color: #94a3b8;"><i class="fi fi-rr-document"></i></div>
-                                            <div style="font-weight: 700; font-size: 15px; color: var(--text-primary);">Belum ada tiket permintaan bagi pakai DTSEN</div>
-                                            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Tiket yang dibuat oleh instansi pemohon akan otomatis muncul di sini.</div>
-                                        </td>
-                                    </tr>
+                                    @if(empty($filterApplied))
+                                        <tr>
+                                            <td colspan="6" style="text-align: center; padding: 60px 24px; color: var(--text-muted);">
+                                                <div style="font-size: 38px; margin-bottom: 12px; color: #0b57d0;">
+                                                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block;">
+                                                        <circle cx="11" cy="11" r="8"></circle>
+                                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                                    </svg>
+                                                </div>
+                                                <div style="font-weight: 700; font-size: 16px; color: var(--text-primary); margin-bottom: 6px;">
+                                                    Tabel Data Tiket Dikosongkan
+                                                </div>
+                                                <div style="font-size: 13px; color: var(--text-muted); max-width: 480px; margin: 0 auto; line-height: 1.5;">
+                                                    Silakan gunakan formulir filter di atas, tentukan kata kunci pencarian, status, atau instansi pemohon, lalu klik <strong>"Terapkan Filter"</strong> untuk menampilkan data.
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="6" style="text-align: center; padding: 50px 20px; color: var(--text-muted);">
+                                                <div style="font-size: 32px; margin-bottom: 10px; color: #94a3b8;"><i class="fi fi-rr-search-alt"></i></div>
+                                                <div style="font-weight: 700; font-size: 15px; color: var(--text-primary);">Tidak ada tiket yang sesuai dengan filter</div>
+                                                <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Coba ubah kata kunci atau klik <strong>Reset</strong> untuk mengatur ulang filter.</div>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforelse
                             </tbody>
                         </table>

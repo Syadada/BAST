@@ -17,39 +17,51 @@ class HistoryController extends Controller
      */
     public function index(Request $request)
     {
-        // 1. Query Tiket DTSEN
-        $query = TiketDtsen::query()->latest();
+        // 1. Cek apakah filter diterapkan oleh admin
+        $filterApplied = $request->has('filter') || 
+                         $request->filled('search') || 
+                         $request->filled('status') || 
+                         $request->filled('instansi') || 
+                         $request->filled('date_start') || 
+                         $request->filled('date_end');
 
-        if ($request->filled('search')) {
-            $search = '%' . trim($request->search) . '%';
-            $query->where(function ($q) use ($search) {
-                $q->where('nomor_tiket', 'like', $search)
-                  ->orWhere('nama_instansi', 'like', $search)
-                  ->orWhere('no_surat_edaran', 'like', $search)
-                  ->orWhere('nama_pemohon', 'like', $search);
-            });
-        }
+        if ($filterApplied) {
+            $query = TiketDtsen::query()->latest();
 
-        if ($request->filled('status')) {
-            if ($request->status === 'SELESAI') {
-                $query->where('step5_done', true);
-            } elseif ($request->status === 'PROSES') {
-                $query->where('step5_done', false);
+            if ($request->filled('search')) {
+                $search = '%' . trim($request->search) . '%';
+                $query->where(function ($q) use ($search) {
+                    $q->where('nomor_tiket', 'like', $search)
+                      ->orWhere('nama_instansi', 'like', $search)
+                      ->orWhere('no_surat_edaran', 'like', $search)
+                      ->orWhere('nama_pemohon', 'like', $search);
+                });
             }
-        }
 
-        if ($request->filled('instansi')) {
-            $query->where('nama_instansi', $request->instansi);
-        }
+            if ($request->filled('status')) {
+                if ($request->status === 'SELESAI') {
+                    $query->where('step5_done', true);
+                } elseif ($request->status === 'PROSES') {
+                    $query->where('step5_done', false);
+                }
+            }
 
-        if ($request->filled('date_start')) {
-            $query->whereDate('created_at', '>=', $request->date_start);
-        }
-        if ($request->filled('date_end')) {
-            $query->whereDate('created_at', '<=', $request->date_end);
-        }
+            if ($request->filled('instansi')) {
+                $query->where('nama_instansi', $request->instansi);
+            }
 
-        $tikets = $query->paginate(15)->withQueryString();
+            if ($request->filled('date_start')) {
+                $query->whereDate('created_at', '>=', $request->date_start);
+            }
+            if ($request->filled('date_end')) {
+                $query->whereDate('created_at', '<=', $request->date_end);
+            }
+
+            $tikets = $query->paginate(15)->withQueryString();
+        } else {
+            // Kosongkan daftar tiket secara default sampai pengguna menerapkan filter
+            $tikets = TiketDtsen::whereRaw('1 = 0')->paginate(15);
+        }
 
         $instansis = TiketDtsen::whereNotNull('nama_instansi')
             ->where('nama_instansi', '!=', '')
@@ -88,6 +100,7 @@ class HistoryController extends Controller
 
         return view('admin.riwayat', compact(
             'tikets',
+            'filterApplied',
             'totalTiket',
             'totalHariIni',
             'totalSelesai',
