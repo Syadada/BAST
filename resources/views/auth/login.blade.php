@@ -54,19 +54,6 @@
                 </span>
             </div>
 
-            @if(session('info'))
-                <div class="form-group-mb-16" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; padding: 10px 14px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px;">
-                    <i class="fi fi-rr-info"></i>
-                    <span>{{ session('info') }}</span>
-                </div>
-            @endif
-
-            @if(session('warning'))
-                <div class="form-group-mb-16" style="background: #fffbeb; color: #92400e; border: 1px solid #fef3c7; padding: 10px 14px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px;">
-                    <i class="fi fi-rr-time-forward"></i>
-                    <span>{{ session('warning') }}</span>
-                </div>
-            @endif
 
             @if(session('success'))
                 <div class="form-group-mb-16" style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px;">

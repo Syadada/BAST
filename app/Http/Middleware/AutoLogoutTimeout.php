@@ -52,9 +52,8 @@ class AutoLogoutTimeout
                     ], 401);
                 }
 
-                // Sesuai permintaan: selalu kembalikan ke login page biasa
-                return redirect()->route('login')
-                    ->with('warning', 'Sesi Anda telah berakhir otomatis (tidak ada aktivitas selama 90 detik). Silakan login kembali.');
+                // Sesuai permintaan: selalu kembalikan ke login page secara bersih tanpa notifikasi
+                return redirect()->route('login');
             }
 
             // Perbarui waktu aktivitas terakhir

@@ -37,12 +37,12 @@
                     <div class="form-shell">
                         <div class="revisi-banner-header">
                             <span class="icon-size-18"><i class="fi fi-rr-exclamation"></i></span>
-                            <span>PERBAIKAN VARIABEL DIPERLUKAN (HASIL VERIFIKASI ADMIN)</span>
+                            <span>PERBAIKAN VARIABEL DIPERLUKAN (HASIL VERIFIKASI WALIDATA)</span>
                         </div>
                         <div class="revisi-banner-desc">
                             Variabel yang Anda ajukan pada tiket <strong>{{ $tiket->nomor_tiket }}</strong> belum sesuai dengan klausul <strong>Surat Edaran No. {{ $tiket->no_surat_edaran }}</strong>.
                             <div class="revisi-catatan-box">
-                                <strong>Catatan Hasil Pengecekan Admin:</strong><br>
+                                <strong>Catatan Hasil Pengecekan Walidata:</strong><br>
                                 {{ $tiket->catatan_admin }}
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                     <form action="{{ route('tiket.update-variabel', $tiket->id) }}" method="POST">
                         @csrf
                         <div class="revisi-form-title">
-                            Silakan sesuaikan daftar variabel DTSEN berikut sesuai catatan admin di atas:
+                            Silakan sesuaikan daftar variabel DTSEN berikut sesuai catatan Walidata di atas:
                         </div>
                         <div class="revisi-form-hint">
                             Pastikan variabel yang Anda inputkan tercantum pada lampiran Surat Edaran resmi.
@@ -88,7 +88,7 @@
                                     Tutup
                                 </button>
                                 <button type="submit" class="btn-pill-primary revisi-btn-submit">
-                                    <i class="fi fi-rr-disk"></i> Simpan & Ajukan Ulang ke Admin
+                                    <i class="fi fi-rr-disk"></i> Simpan & Ajukan Ulang ke Walidata
                                 </button>
                             </div>
                         </div>

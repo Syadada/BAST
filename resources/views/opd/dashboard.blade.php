@@ -77,7 +77,7 @@
                 <div class="opd-guide-number">2</div>
                 <div class="opd-guide-card-title">Verifikasi Walidata</div>
                 <div class="opd-guide-card-desc">
-                    Admin Walidata memeriksa kesesuaian variabel dan menyiapkan data melalui 5 tahap progress resmi.
+                    Tim Walidata memeriksa kesesuaian variabel dan menyiapkan data melalui 5 tahap progress resmi.
                 </div>
             </div>
 

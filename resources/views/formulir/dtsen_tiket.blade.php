@@ -43,18 +43,12 @@
                     </div>
 
                     @auth
-                        @if(!Auth::user()->isSuperAdmin())
-                            <a href="{{ route('opd.dashboard') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                                <i class="fi fi-rr-apps"></i> Dashboard OPD
-                            </a>
-                            <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                                <i class="fi fi-rr-document"></i> Layanan DTSEN
-                            </a>
-                        @else
-                            <a href="{{ route('admin.riwayat') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px; background: #0f172a; color: #fff; border-color: #0f172a;">
-                                <i class="fi fi-rr-settings"></i> Dashboard Admin
-                            </a>
-                        @endif
+                        <a href="{{ route('opd.dashboard') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
+                            <i class="fi fi-rr-apps"></i> Dashboard OPD
+                        </a>
+                        <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
+                            <i class="fi fi-rr-document"></i> Layanan DTSEN
+                        </a>
                         <form action="{{ route('logout') }}" method="POST" style="display: inline; margin: 0;">
                             @csrf
                             <button type="submit" class="btn-header-logout" style="padding: 6px 10px; font-size: 11px;">
@@ -63,7 +57,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px;">
-                            <i class="fi fi-rr-lock"></i> Login Akun OPD / Admin
+                            <i class="fi fi-rr-lock"></i> Masuk Portal OPD
                         </a>
                     @endauth
                 </div>
@@ -346,7 +340,7 @@
                             <div>
                                 <strong style="color: #92400e; font-size: 14px;"><i class="fi fi-rr-exclamation"></i> Perhatian: Verifikasi Variabel Memerlukan Perbaikan</strong>
                                 <div style="font-size: 13px; color: #78350f; margin-top: 4px;">
-                                    Catatan Admin: {{ $selectedTiket->catatan_admin }}
+                                    Catatan Tim Walidata: {{ $selectedTiket->catatan_admin }}
                                 </div>
                             </div>
                             <a href="{{ route('profile') }}" class="btn-pill-primary" style="background: #d97706; border-color: #d97706; font-size: 12px; padding: 6px 14px;">
@@ -438,7 +432,7 @@
 
                     <div>
                         <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px;">
-                            Catatan Verifikator / Admin:
+                            Catatan Verifikasi Tim Walidata:
                         </div>
                         <div style="background: #f8fafd; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--text-primary); line-height: 1.4;">
                             {{ $selectedTiket->catatan_admin ?: 'Tiket telah diterima dan sedang dalam antrean verifikasi administrasi.' }}

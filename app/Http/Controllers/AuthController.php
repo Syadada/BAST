@@ -51,17 +51,17 @@ class AuthController extends Controller
             ->first();
 
         if ($user && Hash::check($password, $user->password)) {
-            // Mencegah Administrator masuk lewat portal login OPD
+            // Mencegah Administrator masuk lewat portal login OPD secara senyap (zero disclosure)
             if ($user->isSuperAdmin()) {
                 AuditLogger::log(
                     'AUTH_REJECTED_ADMIN_ON_OPD_PORTAL',
-                    "Akun Administrator [{$user->name}] mencoba masuk melalui portal login OPD. Akses ditolak.",
+                    "Akun Administrator [{$user->name}] mencoba masuk melalui portal login OPD. Akses ditolak secara senyap.",
                     'WARNING',
                     ['user_id' => $user->id, 'attempted_portal' => 'OPD_PORTAL']
                 );
 
                 return back()->withErrors([
-                    'login' => 'Akses Ditolak: Akun Administrator tidak dapat masuk melalui portal login OPD ini.',
+                    'login' => 'Kredensial login tidak cocok. Pastikan email/username dan kata sandi benar.',
                 ])->withInput($request->only('login'));
             }
 
@@ -205,9 +205,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Admin maupun OPD jika logout selalu dikembalikan ke login page biasa
-        return redirect()->route('login')
-            ->with('info', 'Anda telah berhasil logout. Sesi telah diakhiri.');
+        // Admin maupun OPD jika logout selalu dikembalikan ke login page secara bersih tanpa notifikasi
+        return redirect()->route('login');
     }
 
     /**

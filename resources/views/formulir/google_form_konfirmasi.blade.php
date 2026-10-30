@@ -110,9 +110,6 @@
                         <a href="{{ route('formulir.index') }}" class="form-link" data-i18n="confirm_link_other">
                             ← Kirim Formulir Lain
                         </a>
-                        <a href="{{ route('admin.riwayat') }}" class="form-link" data-i18n="link_riwayat">
-                            Riwayat Berkas
-                        </a>
                     </div>
 
                     <a href="{{ route('kak.cetak', $kak->id) }}" target="_blank" class="form-btn-submit" style="text-decoration: none;">

@@ -95,7 +95,7 @@
                 <div style="background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
                     <div style="font-size: 11px; color: #64748b; font-weight: 600;">PETUGAS WALIDATA</div>
                     <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">
-                        {{ $riwayat->created_by ?: 'Admin Walidata DTSEN' }}
+                        {{ $riwayat->created_by ?: 'Tim Walidata DTSEN' }}
                     </div>
                 </div>
             </div>

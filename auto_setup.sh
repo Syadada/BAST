@@ -46,7 +46,6 @@ echo ""
 echo "======================================================================="
 echo " Lingkungan Server Siap Digunakan!"
 echo " - Portal OPD   : http://127.0.0.1:8080/login"
-echo " - Portal Admin : http://127.0.0.1:8080/dkisp-secret/ (Rahasia)"
 echo "======================================================================="
 echo ""
 php artisan serve --host=127.0.0.1 --port=8080

@@ -243,19 +243,16 @@ echo  - Backend Engine : Python FastAPI (Port %PYTHON_PORT%)
 echo  - Frontend Client: Laravel 12 Blade (Port %LARAVEL_PORT%)
 echo  - Database       : SQLite WAL Mode (database/database.sqlite)
 echo.
-echo [AKSES DARI LAPTOP INI (SERVER)]
+echo [AKSES DARI LAPTOP INI]
 echo  - Portal OPD     : http://127.0.0.1:%LARAVEL_PORT%/login
-echo  - Portal Admin   : http://127.0.0.1:%LARAVEL_PORT%/dkisp-secret/ (Rahasia)
 echo.
 if defined SERVER_IP (
 echo [AKSES DARI LAPTOP LAIN DALAM JARINGAN WIFI ATAU LAN]
 echo  - Buka di Browser : http://%SERVER_IP%:%LARAVEL_PORT%/
 echo  - Portal OPD      : http://%SERVER_IP%:%LARAVEL_PORT%/login
-echo  - Portal Admin    : http://%SERVER_IP%:%LARAVEL_PORT%/dkisp-secret/
 echo.
 )
-echo [KREDENSIAL BAWAAN]
-echo  - Super Admin    : admin / admin (atau admin@gmail.com / admin)
+echo [KREDENSIAL AKUN OPD]
 echo  - OPD Dinsos     : dinsos / dinsos123
 echo  - OPD Bappeda    : bappeda / bappeda123
 echo =======================================================================

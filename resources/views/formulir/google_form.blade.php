@@ -202,10 +202,6 @@
                             </svg>
                             <span data-i18n="link_blanko">Cetak Blanko KAK</span>
                         </a>
-
-                        <a href="{{ route('admin.riwayat') }}" class="form-link" title="Buka Riwayat">
-                            <span data-i18n="link_riwayat">Riwayat Berkas</span>
-                        </a>
                     </div>
 
                     <button type="submit" class="form-btn-submit">

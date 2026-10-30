@@ -101,7 +101,7 @@
             </div>
 
             <div class="ticket-detail-sub">
-                <i class="fi fi-rr-lock"></i> <em>Tabel ini diinput resmi oleh Admin dan bersifat Read-Only bagi Perangkat Daerah.</em>
+                <i class="fi fi-rr-lock"></i> <em>Tabel ini diverifikasi resmi oleh Tim Walidata dan bersifat Read-Only bagi Perangkat Daerah.</em>
             </div>
         </div>
 
@@ -179,7 +179,7 @@
                                 <div class="ticket-empty-icon"><i class="fi fi-rr-folder"></i></div>
                                 <div class="ticket-empty-title">Belum Ada Data Riwayat Bagi Data DTSEN Resmi</div>
                                 <div class="ticket-empty-desc">
-                                    Setelah tiket permohonan Anda diselesaikan dan BAST ditandatangani, data resmi akan diinput oleh Admin dan tercatat di sini.
+                                    Setelah tiket permohonan Anda diselesaikan dan BAST ditandatangani, data resmi akan diterbitkan oleh Tim Walidata dan tercatat di sini.
                                 </div>
                             </td>
                         </tr>

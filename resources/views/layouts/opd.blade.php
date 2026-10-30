@@ -61,13 +61,6 @@
                     <span class="opd-nav-badge">+Form</span>
                 </a>
 
-                @if(Auth::check() && Auth::user()->isSuperAdmin())
-                    <div class="opd-nav-section-title">Akses Khusus Admin</div>
-                    <a href="{{ route('admin.riwayat') }}" class="opd-nav-link">
-                        <i class="fi fi-rr-settings"></i>
-                        <span>Panel Admin</span>
-                    </a>
-                @endif
             </div>
 
             <!-- Footer User Profile & Device ID -->
