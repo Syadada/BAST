@@ -16,6 +16,7 @@ class User extends Authenticatable
         'username',
         'password',
         'role',
+        'role_id',
         'nama_instansi',
         'nomor_kontak',
         'last_login_at',
@@ -46,6 +47,11 @@ class User extends Authenticatable
         return $this->role === 'perangkat_daerah';
     }
 
+    public function roleRelation()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
     public function riwayatBagiDatas()
     {
         return $this->hasMany(RiwayatBagiDataDtsen::class, 'user_id');
@@ -54,5 +60,10 @@ class User extends Authenticatable
     public function loginLogs()
     {
         return $this->hasMany(AuditLog::class, 'user_id')->where('action', 'AUTH_LOGIN');
+    }
+
+    public function hakAkses()
+    {
+        return $this->hasMany(HakAksesDtsen::class, 'user_id');
     }
 }

@@ -39,7 +39,53 @@
         </div>
     </div>
 
-    <!-- 2. Tabel Data Riwayat Bagi Data DTSEN Resmi (Read-Only untuk Akun OPD) -->
+    @if(isset($datasets) && $datasets->count() > 0)
+        <!-- 2. Katalog Master Dataset DTSEN & Dokumen SOP / Manual Book -->
+        @foreach($datasets as $ds)
+            <div class="form-card ticket-section-card-large form-group-mb-20">
+                <div class="ticket-top-actions form-group-mb-16">
+                    <div>
+                        <div class="form-badge-system form-group-mb-16">
+                            <span><i class="fi fi-rr-database"></i> KATALOG MASTER DATASET DTSEN</span>
+                        </div>
+                        <h2 class="ticket-heading-title" style="font-size: 18px;">
+                            {{ $ds->nama_dataset }}
+                        </h2>
+                        <div class="ticket-heading-meta">
+                            Kode: <strong>{{ $ds->kode_dataset }}</strong> &bull; Cakupan: <strong>{{ $ds->kategori_desil }}</strong>
+                        </div>
+                    </div>
+
+                    @if($ds->nama_file_sop)
+                        <div>
+                            <span class="btn-pill-outline" style="font-size: 12px; padding: 6px 14px; cursor: default; background: #f8fafc;" title="Dokumen SOP Layanan">
+                                <i class="fi fi-rr-document"></i> {{ $ds->nama_file_sop }}
+                            </span>
+                        </div>
+                    @endif
+                </div>
+
+                <p class="portal-subtitle" style="margin-bottom: 16px;">
+                    {{ $ds->deskripsi }}
+                </p>
+
+                <div>
+                    <div class="ticket-detail-label form-group-mb-16" style="margin-bottom: 8px;">
+                        Variabel Baku yang Tersedia dalam Master Dataset:
+                    </div>
+                    <div class="ticket-vars-container">
+                        @foreach(($ds->daftar_variabel_tersedia ?? []) as $vItem)
+                            <span class="ticket-var-pill" style="font-size: 11px;">
+                                {{ $vItem }}
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endif
+
+    <!-- 3. Tabel Data Riwayat Bagi Data DTSEN Resmi (Read-Only untuk Akun OPD) -->
     <div class="form-card ticket-section-card-large">
         <div class="ticket-top-actions form-group-mb-20">
             <div>

@@ -143,5 +143,8 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now()->subHours(3),
             ]);
         }
+
+        // 6. Jalankan Seeder Tata Kelola (Roles, Privileges, Dataset, ROPA, DPIA)
+        $this->call(GovernanceDatabaseSeeder::class);
     }
 }

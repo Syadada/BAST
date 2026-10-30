@@ -80,7 +80,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $namaInstansi = $user->nama_instansi ?: $user->name;
 
-        $tiket = TiketDtsen::where('id', $id)
+        $tiket = TiketDtsen::with(['pengolahan', 'hakAkses', 'pengamanan', 'ropa', 'dpia', 'riwayatBagiData'])
+            ->where('id', $id)
             ->where(function ($q) use ($user, $namaInstansi) {
                 // Keamanan data: hanya pemilik tiket yang dapat membuka (kecuali admin)
                 if (!$user->isSuperAdmin()) {
@@ -120,7 +121,10 @@ class ProfileController extends Controller
             ->latest('tanggal_tiket_dibuat')
             ->get();
 
-        return view('opd.layanan_bagi_pakai', compact('user', 'tikets', 'selectedTiket', 'riwayatBagiDatas'));
+        // Katalog Dataset DTSEN & Dokumen SOP / Manual Book
+        $datasets = \App\Models\Dataset::where('status', 'AKTIF')->get();
+
+        return view('opd.layanan_bagi_pakai', compact('user', 'tikets', 'selectedTiket', 'riwayatBagiDatas', 'datasets'));
     }
 
     /**

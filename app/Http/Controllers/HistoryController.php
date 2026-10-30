@@ -506,7 +506,8 @@ class HistoryController extends Controller
      */
     public function tiketShow($id)
     {
-        $tiket = TiketDtsen::findOrFail($id);
+        $tiket = TiketDtsen::with(['pengolahan', 'hakAkses', 'pengamanan', 'ropa', 'dpia', 'riwayatBagiData'])
+            ->findOrFail($id);
 
         return view('admin.tiket.show', compact('tiket'));
     }

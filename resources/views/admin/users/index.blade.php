@@ -116,12 +116,12 @@
                                 @if($u->role === 'superadmin')
                                     <span class="role-badge-super">
                                         <i class="fi fi-rr-shield-check"></i>
-                                        Super Admin
+                                        {{ $u->roleRelation ? $u->roleRelation->name : 'Super Administrator' }}
                                     </span>
                                 @else
                                     <span class="role-badge-opd">
                                         <i class="fi fi-rr-building"></i>
-                                        Perangkat Daerah
+                                        {{ $u->roleRelation ? $u->roleRelation->name : 'Perangkat Daerah' }}
                                     </span>
                                 @endif
                             </td>

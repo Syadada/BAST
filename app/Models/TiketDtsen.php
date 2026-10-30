@@ -156,4 +156,35 @@ class TiketDtsen extends Model
         }
         return 'Sedang Berjalan: Progress 1';
     }
+
+    public function pengolahan()
+    {
+        return $this->hasOne(PengolahanDtsen::class, 'tiket_dtsen_id');
+    }
+
+    public function hakAkses()
+    {
+        return $this->hasMany(HakAksesDtsen::class, 'tiket_dtsen_id');
+    }
+
+    public function pengamanan()
+    {
+        return $this->hasOne(PengamananDtsen::class, 'tiket_dtsen_id');
+    }
+
+    public function ropa()
+    {
+        return $this->hasOne(RopaDtsen::class, 'tiket_dtsen_id');
+    }
+
+    public function dpia()
+    {
+        return $this->hasOne(DpiaDtsen::class, 'tiket_dtsen_id');
+    }
+
+    public function riwayatBagiData()
+    {
+        return $this->hasMany(RiwayatBagiDataDtsen::class, 'tiket_dtsen_id');
+    }
 }
+

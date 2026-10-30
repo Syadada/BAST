@@ -4198,6 +4198,134 @@ nav[role="navigation"] svg,
     border-color: #fca5a5;
 }
 
+/* ============================================================== */
+/* 22. TATA KELOLA DATA & KEPATUHAN UU PDP (GOVERNANCE CARDS)      */
+/* ============================================================== */
+.gov-stack-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.gov-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.gov-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.gov-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.gov-card-icon {
+    font-size: 18px;
+    color: #0b57d0;
+}
+
+.gov-card-body {
+    padding: 24px;
+}
+
+.gov-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .gov-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.gov-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gov-item-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gov-item-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+.gov-item-sub {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.gov-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.gov-badge-green {
+    background: #e6f4ea;
+    color: #137333;
+    border: 1px solid #ceead6;
+}
+
+.gov-badge-blue {
+    background: #e8f0fe;
+    color: #1a73e8;
+    border: 1px solid #d2e3fc;
+}
+
+.gov-badge-amber {
+    background: #fef7e0;
+    color: #b06000;
+    border: 1px solid #feefc3;
+}
+
+.gov-hash-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    word-break: break-all;
+    display: block;
+    margin-top: 4px;
+}
+
+
 
 
 

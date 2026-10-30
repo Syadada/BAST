@@ -47,13 +47,13 @@
                     </div>
                 </div>
                 <div>
-                    @if($user->role === 'superadmin')
+                    @if($user->isSuperAdmin())
                         <span class="role-badge-super">
-                            <i class="fi fi-rr-shield-check"></i> Super Administrator
+                            <i class="fi fi-rr-shield-check"></i> {{ $user->roleRelation ? $user->roleRelation->name : 'Super Administrator' }}
                         </span>
                     @else
                         <span class="role-badge-opd">
-                            <i class="fi fi-rr-building"></i> Perangkat Daerah (OPD)
+                            <i class="fi fi-rr-building"></i> {{ $user->roleRelation ? $user->roleRelation->name : 'Perangkat Daerah (OPD)' }}
                         </span>
                     @endif
                 </div>
