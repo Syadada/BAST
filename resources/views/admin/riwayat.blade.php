@@ -11,6 +11,33 @@
     
     <!-- Unified Master Stylesheet -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <style>
+        .instansi-title-link {
+            font-weight: 700;
+            color: #0b57d0;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.4;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+        .instansi-title-link:hover {
+            color: #0842a0;
+            text-decoration: underline;
+        }
+        .instansi-title-link .link-arrow {
+            opacity: 0;
+            transform: translateX(-3px);
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+        .instansi-title-link:hover .link-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
 </head>
 <body>
 
@@ -272,7 +299,7 @@
                                 <span>Daftar Tiket Permintaan Bagi Pakai DTSEN</span>
                             </h2>
                             <p class="dash-card-subtitle">
-                                Klik tombol <strong>"✓ OK"</strong> pada tiket untuk menyelesaikan tahap yang berjalan. Di sisi pengguna, tahapan tersebut akan langsung bercentang hijau.
+                                Rekapitulasi data entry tiket permohonan. Klik pada <strong>Nama Instansi</strong> untuk membuka halaman baru dengan informasi selengkapnya.
                             </p>
                         </div>
                         <span class="dash-card-count">
@@ -284,12 +311,12 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 160px;">No. Tiket</th>
-                                    <th style="min-width: 220px;">Instansi & No. Surat</th>
-                                    <th style="min-width: 170px;">Variabel DTSEN</th>
-                                    <th style="width: 140px;">Progress</th>
-                                    <th style="min-width: 190px;">Tahapan & Verifikasi (User View)</th>
-                                    <th style="text-align: center; width: 230px;">Aksi Admin (Manipulasi Proses)</th>
+                                    <th style="width: 150px;">No. Tiket</th>
+                                    <th style="min-width: 240px;">Nama Instansi (Klik untuk Info Lengkap)</th>
+                                    <th style="min-width: 180px;">Surat Edaran</th>
+                                    <th style="min-width: 160px;">Variabel DTSEN</th>
+                                    <th style="width: 150px;">Status & Progress</th>
+                                    <th style="text-align: right; width: 180px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -308,81 +335,70 @@
                                         <!-- 1. No Tiket -->
                                         <td>
                                             <div>
-                                                <a href="{{ route('admin.tiket.show', $item->id) }}" style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Buka Detail Progress Tiket">
-                                                    <span>{{ $item->nomor_tiket }}</span>
+                                                <a href="{{ route('admin.tiket.show', $item->id) }}" style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 13px; text-decoration: none;" title="Buka Detail Tiket">
+                                                    {{ $item->nomor_tiket }}
                                                 </a>
                                             </div>
-                                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
                                                 {{ $item->created_at->format('d/m/Y H:i') }} WIB
                                             </div>
                                         </td>
 
-                                        <!-- 2. Instansi & No Surat -->
+                                        <!-- 2. Nama Instansi (Klik menuju ke page baru dengan info selengkapnya) -->
                                         <td>
-                                            <div style="font-weight: 700; color: var(--text-primary); font-size: 14px;">
-                                                {{ $item->nama_instansi }}
-                                            </div>
-                                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">
-                                                Surat: <strong>{{ $item->no_surat_edaran }}</strong>
+                                            <div>
+                                                <a href="{{ route('admin.tiket.show', $item->id) }}" class="instansi-title-link" title="Klik untuk membuka informasi selengkapnya">
+                                                    <span>{{ $item->nama_instansi }}</span>
+                                                    <i class="fi fi-rr-arrow-up-right link-arrow"></i>
+                                                </a>
                                             </div>
                                             @if($item->nama_pemohon)
-                                                <div style="font-size: 11px; color: var(--text-muted);">
-                                                    PIC: {{ $item->nama_pemohon }} ({{ $item->kontak_pemohon ?: '-' }})
+                                                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                                                    PIC: <strong>{{ $item->nama_pemohon }}</strong> ({{ $item->kontak_pemohon ?: '-' }})
                                                 </div>
                                             @endif
                                         </td>
 
-                                        <!-- 3. Variabel DTSEN & Verifikasi SE -->
+                                        <!-- 3. Surat Edaran -->
                                         <td>
-                                            @if($item->status === 'PERLU_PERBAIKAN')
-                                                <div style="margin-bottom: 5px;">
-                                                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-                                                        ⚠️ PERLU PERBAIKAN OPD
-                                                    </span>
-                                                </div>
-                                            @elseif($item->step1_done)
-                                                <div style="margin-bottom: 5px;">
-                                                    <span style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-                                                        ✓ SESUAI SE (APPROVED)
-                                                    </span>
-                                                </div>
-                                            @else
-                                                <div style="margin-bottom: 5px;">
-                                                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-                                                        ⏳ Menunggu Cek Admin
-                                                    </span>
+                                            <div style="font-weight: 600; color: var(--text-primary); font-size: 13px;">
+                                                {{ $item->no_surat_edaran }}
+                                            </div>
+                                            @if($item->file_surat)
+                                                <div style="margin-top: 4px;">
+                                                    <a href="{{ route('admin.riwayat.download', $item->id) }}" class="btn-pill-outline" style="font-size: 11px; padding: 2px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Unduh Berkas Surat Edaran">
+                                                        <i class="fi fi-rr-download"></i> Berkas SE
+                                                    </a>
                                                 </div>
                                             @endif
-
-                                            <span class="dtsen-chip" style="font-size: 12px; font-weight: 700; color: var(--blue-primary); background: var(--blue-light);">
-                                                {{ count($item->variabel_dtsen ?? []) }} Variabel Diminta
-                                            </span>
-                                            
-                                            <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
-                                                <button type="button" 
-                                                        onclick="openVerifModal({{ $item->id }}, '{{ $item->nomor_tiket }}', '{{ addslashes($item->nama_instansi) }}', '{{ addslashes($item->no_surat_edaran) }}', {{ json_encode($item->variabel_dtsen ?? []) }}, '{{ $item->file_surat ? route('admin.riwayat.download', $item->id) : '' }}', '{{ addslashes($item->catatan_admin ?? '') }}', '{{ $item->status }}', {{ $item->step1_done ? 'true' : 'false' }})" 
-                                                        class="btn-pill-primary" 
-                                                        style="font-size: 11px; padding: 5px 10px; width: 100%; justify-content: center; gap: 4px; background: {{ $item->status === 'PERLU_PERBAIKAN' ? '#d97706' : ($item->step1_done ? '#166534' : '#0b57d0') }}; border-color: transparent;">
-                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                                        <circle cx="11" cy="11" r="8"></circle>
-                                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                                    </svg>
-                                                    <span>Cek & Verifikasi SE</span>
-                                                </button>
-                                                
-                                                <button type="button" 
-                                                        onclick="openVarModal('{{ $item->nomor_tiket }}', '{{ addslashes($item->nama_instansi) }}', {{ json_encode($item->variabel_dtsen ?? []) }})" 
-                                                        class="btn-pill-outline" 
-                                                        style="font-size: 10px; padding: 2px 6px; text-align: center; justify-content: center;">
-                                                    👁️ Intip Variabel
-                                                </button>
-                                            </div>
                                         </td>
 
-                                        <!-- 4. Progress Bar -->
+                                        <!-- 4. Variabel DTSEN & Status Verifikasi -->
+                                        <td>
+                                            <div style="margin-bottom: 5px;">
+                                                <span class="dtsen-chip" style="font-size: 11px; font-weight: 700; color: var(--blue-primary); background: var(--blue-light); padding: 3px 8px; border-radius: 6px;">
+                                                    {{ count($item->variabel_dtsen ?? []) }} Variabel Diminta
+                                                </span>
+                                            </div>
+                                            @if($item->status === 'PERLU_PERBAIKAN')
+                                                <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block;">
+                                                    ⚠️ Perlu Perbaikan
+                                                </span>
+                                            @elseif($item->step1_done)
+                                                <span style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block;">
+                                                    ✓ Sesuai SE
+                                                </span>
+                                            @else
+                                                <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block;">
+                                                    ⏳ Menunggu Cek
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        <!-- 5. Status & Progress -->
                                         <td>
                                             <div style="display: flex; align-items: center; gap: 8px;">
-                                                <div class="progress-track" style="height: 10px; width: 80px;">
+                                                <div class="progress-track" style="height: 8px; width: 75px;">
                                                     <div class="progress-fill" style="width: {{ $item->progress_percent }}%;"></div>
                                                 </div>
                                                 <span style="font-size: 12px; font-weight: 700; color: {{ $item->step5_done ? '#1e8e3e' : '#0b57d0' }};">
@@ -391,84 +407,40 @@
                                             </div>
                                             <div style="font-size: 11px; margin-top: 4px; font-weight: 600; color: {{ $item->step5_done ? '#1e8e3e' : '#444746' }};">
                                                 @if($item->step5_done)
-                                                    ✓ SELESAI (100%)
+                                                    <span style="color: #1e8e3e;">✓ Selesai 100%</span>
                                                 @else
-                                                    PROGRESS {{ $item->current_step }}
+                                                    Progress {{ $activeStepNum }}/5
                                                 @endif
                                             </div>
                                         </td>
 
-                                        <!-- 5. 5-Step Mini Tracker (Menunjukkan Centang Hijau) -->
-                                        <td>
-                                            <div style="display: flex; gap: 6px; align-items: center;">
-                                                @for($s = 1; $s <= 5; $s++)
-                                                    @if($item->isStepDone($s))
-                                                        <span title="Progress {{ $s }}: Selesai (Centang Hijau)" style="background: #1e8e3e; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">✓</span>
-                                                    @elseif($s === $activeStepNum)
-                                                        <span title="Progress {{ $s }}: Sedang Diproses" style="background: #0b57d0; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">{{ $s }}</span>
-                                                    @else
-                                                        <span title="Progress {{ $s }}: Menunggu" style="background: #e0e0e0; color: #70757a; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">{{ $s }}</span>
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-                                                @if($item->step5_done)
-                                                    <span style="color: #1e8e3e; font-weight: 600;">Semua progress selesai</span>
-                                                @else
-                                                    Aktif: <strong>Progress {{ $activeStepNum }}</strong>
-                                                @endif
-                                            </div>
-                                        </td>
+                                        <!-- 6. Aksi (Detail, OK Cepat, Hapus) -->
+                                        <td style="text-align: right;">
+                                            <div style="display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                                                <!-- Tombol ke Halaman Baru Info Selengkapnya -->
+                                                <a href="{{ route('admin.tiket.show', $item->id) }}" class="btn-pill-primary" style="padding: 6px 12px; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Buka Halaman Info Selengkapnya">
+                                                    <span>Detail</span>
+                                                    <i class="fi fi-rr-arrow-right"></i>
+                                                </a>
 
-                                        <!-- 6. Aksi Admin (Manipulasi Proses) -->
-                                        <td style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; gap: 6px; align-items: stretch;">
-                                                
-                                                <!-- Tombol Satu-Klik "✓ OK" -->
+                                                <!-- Tombol Cepat "✓ OK" untuk Admin -->
                                                 @if(!$item->step5_done)
-                                                    <form action="{{ route('admin.tiket.step-ok', $item->id) }}" method="POST" style="margin: 0;">
+                                                    <form action="{{ route('admin.tiket.step-ok', $item->id) }}" method="POST" style="margin: 0; display: inline;">
                                                         @csrf
-                                                        <button type="submit" class="btn-step-ok" style="width: 100%; justify-content: center;" title="Klik OK untuk menyelesaikan Progress {{ $activeStepNum }}">
-                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                                            </svg>
-                                                            <span>OK (Selesaikan Progress {{ $activeStepNum }})</span>
+                                                        <button type="submit" class="btn-step-ok" style="padding: 5px 8px; font-size: 11px;" title="Selesaikan Progress {{ $activeStepNum }} (Centang Hijau)">
+                                                            <span>✓ OK</span>
                                                         </button>
                                                     </form>
-                                                @else
-                                                    <span class="badge-status success" style="text-align: center; font-size: 11px;">
-                                                        ✓ SELESAI PENUH
-                                                    </span>
                                                 @endif
 
-                                                <!-- Tombol Aksi Tambahan: Kelola Tahap, Unduh Surat, Hapus -->
-                                                <div style="display: flex; gap: 4px; justify-content: center;">
-                                                    <button type="button" 
-                                                            onclick="openManageModal({{ $item->id }}, '{{ $item->nomor_tiket }}', '{{ addslashes($item->nama_instansi) }}', {{ $item->step1_done ? 'true' : 'false' }}, {{ $item->step2_done ? 'true' : 'false' }}, {{ $item->step3_done ? 'true' : 'false' }}, {{ $item->step4_done ? 'true' : 'false' }}, {{ $item->step5_done ? 'true' : 'false' }}, '{{ addslashes($item->catatan_admin ?? '') }}')" 
-                                                            class="btn-row-action print" 
-                                                            style="font-size: 11px; padding: 4px 8px;"
-                                                            title="Buka panel manipulasi tahapan secara manual">
-                                                        <span><i class="fi fi-rr-settings"></i> Kelola</span>
+                                                <!-- Tombol Hapus -->
+                                                <form action="{{ route('admin.riwayat.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus tiket {{ $item->nomor_tiket }} milik {{ $item->nama_instansi }}?');" style="display: inline; margin: 0;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn-row-action delete" style="padding: 5px 8px;" title="Hapus Tiket">
+                                                        <i class="fi fi-rr-trash"></i>
                                                     </button>
-
-                                                    @if($item->file_surat)
-                                                        <a href="{{ route('admin.riwayat.download', $item->id) }}" class="btn-row-action download" style="font-size: 11px; padding: 4px 8px;" title="Unduh Berkas Surat">
-                                                            <span><i class="fi fi-rr-download"></i> Surat</span>
-                                                        </a>
-                                                    @endif
-
-                                                    <form action="{{ route('admin.riwayat.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus tiket {{ $item->nomor_tiket }} milik {{ $item->nama_instansi }}?');" style="display: inline; margin: 0;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn-row-action delete" style="padding: 4px 8px;" title="Hapus Tiket">
-                                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                </div>
-
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -488,86 +460,6 @@
                     @if(isset($tikets) && method_exists($tikets, 'links'))
                     <div class="dash-pagination">
                         {{ $tikets->links() }}
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Audit Log Section -->
-                <div class="dash-card">
-                    <div class="dash-card-header">
-                        <div>
-                            <h2 class="dash-card-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-primary)" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                                <span>Audit Trail Forensik Layanan DTSEN</span>
-                            </h2>
-                            <p class="dash-card-subtitle">Log aktivitas sistem dengan pencatatan status integritas otomatis.</p>
-                        </div>
-                        <a href="{{ route('admin.riwayat.export-logs', ['format' => 'csv']) }}" class="btn-pill-outline">
-                            <i class="fi fi-rr-download"></i> Unduh Log CSV
-                        </a>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 170px;">Waktu Aktivitas</th>
-                                    <th style="width: 160px;">Aksi Sistem</th>
-                                    <th style="width: 230px;">Identitas Perangkat & IP</th>
-                                    <th>Keterangan Aktivitas</th>
-                                    <th style="width: 140px;">Status Integritas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse(($auditLogs ?? []) as $log)
-                                    <tr>
-                                        <td style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
-                                            {{ date('d/m/Y H:i:s', strtotime($log->created_at)) }}
-                                        </td>
-                                        <td><strong>{{ $log->action }}</strong></td>
-                                        <td>
-                                            <div style="display: flex; align-items: center; gap: 8px;">
-                                                <div style="font-size: 18px; line-height: 1; flex-shrink: 0;">
-                                                    {{ $log->device_icon }}
-                                                </div>
-                                                <div>
-                                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                                        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--blue-primary); font-size: 11px; background: #eaf1fb; padding: 1px 6px; border-radius: 4px; border: 1px solid #d3e3fd;">
-                                                            {{ $log->device_identifier }}
-                                                        </span>
-                                                        <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">
-                                                            {{ $log->device_os }}
-                                                        </span>
-                                                    </div>
-                                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
-                                                        IP: <span style="font-family: var(--font-mono); font-weight: 500;">{{ $log->ip_address ?? '127.0.0.1' }}</span> · {{ $log->device_browser }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>{{ $log->description }}</td>
-                                        <td>
-                                            <span style="font-size: 11px; font-weight: 700; color: var(--green-primary); background: var(--green-light); padding: 3px 10px; border-radius: 6px; border: 1px solid var(--green-border);">
-                                                {{ $log->status }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" style="text-align: center; padding: 32px; color: var(--text-muted);">
-                                            Belum ada catatan log aktivitas sistem.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    @if(isset($auditLogs) && method_exists($auditLogs, 'links'))
-                    <div class="dash-pagination">
-                        {{ $auditLogs->links() }}
                     </div>
                     @endif
                 </div>
