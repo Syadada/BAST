@@ -8,7 +8,7 @@
 <div class="form-create-shell">
 
     <!-- Flash Alert Error jika Ada -->
-    @if($errors->any())
+    @if(isset($errors) && $errors->any())
         <div class="form-error-banner">
             <div class="form-error-title">
                 <i class="fi fi-rr-cross-circle"></i> Mohon Periksa Isian Anda:

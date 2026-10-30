@@ -58,19 +58,21 @@ Route::middleware('auth')->group(function () {
         // 1. Dashboard OPD (Clean Page: Hanya Tombol Buat Tiket Baru & Info Instansi)
         Route::get('/opd/dashboard', [ProfileController::class, 'dashboard'])->name('opd.dashboard');
 
-        // 2. Daftar Tiket Saya (Ala DomaiNesia Support Tickets) & Detail Progress
-        Route::get('/opd/tiket', [ProfileController::class, 'daftarTiket'])->name('opd.tiket.index');
-        Route::get('/opd/tiket/{id}', [ProfileController::class, 'showTiket'])->name('opd.tiket.show');
-
-        // 3. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
-        Route::get('/opd/layanan-bagi-pakai', [ProfileController::class, 'layananBagiPakai'])->name('opd.layanan-bagi-pakai');
-        Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
-
-        // 4. Layanan Tiket Permohonan DTSEN & Revisi Variabel
+        // 2. Layanan Buat Tiket Baru (Formulir Pengajuan Tiket Permohonan DTSEN)
         Route::get('/opd/tiket/create', [TiketDtsenController::class, 'create'])->name('opd.tiket.create');
         Route::get('/formulir', [TiketDtsenController::class, 'index'])->name('formulir.index');
         Route::post('/formulir', [TiketDtsenController::class, 'store'])->name('formulir.store');
         Route::post('/tiket', [TiketDtsenController::class, 'store'])->name('tiket.store');
+
+        // 3. Daftar Tiket Saya (Ala DomaiNesia Support Tickets) & Detail Progress
+        Route::get('/opd/tiket', [ProfileController::class, 'daftarTiket'])->name('opd.tiket.index');
+        Route::get('/opd/tiket/{id}', [ProfileController::class, 'showTiket'])->whereNumber('id')->name('opd.tiket.show');
+
+        // 4. Halaman Layanan Bagi Pakai DTSEN (Progress 5 Tahapan & Tabel Riwayat Bagi Data Resmi)
+        Route::get('/opd/layanan-bagi-pakai', [ProfileController::class, 'layananBagiPakai'])->name('opd.layanan-bagi-pakai');
+        Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
+
+        // 5. Unduh Surat & Revisi Variabel
         Route::get('/tiket/{id}/surat', [TiketDtsenController::class, 'downloadSurat'])->name('tiket.download-surat');
         Route::post('/tiket/{id}/update-variabel', [TiketDtsenController::class, 'updateVariabel'])->name('tiket.update-variabel');
     });
@@ -89,7 +91,7 @@ Route::middleware('auth')->group(function () {
 
         // Daftar Tiket Support (Ala DomaiNesia) & Detail Progress Tiket Sisi Admin
         Route::get('/tiket', [HistoryController::class, 'tiketIndex'])->name('tiket.index');
-        Route::get('/tiket/{id}', [HistoryController::class, 'tiketShow'])->name('tiket.show');
+        Route::get('/tiket/{id}', [HistoryController::class, 'tiketShow'])->whereNumber('id')->name('tiket.show');
 
         Route::post('/tiket/{id}/step-ok', [HistoryController::class, 'stepOk'])->name('tiket.step-ok');
         Route::post('/tiket/{id}/update-steps', [HistoryController::class, 'updateSteps'])->name('tiket.update-steps');
