@@ -11,35 +11,17 @@
     
     <!-- Unified Master Stylesheet (Single CSS) -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <style>
-        .admin-login-shell {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .admin-header-chip {
-            background: #0f172a;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            letter-spacing: 0.5px;
-        }
-    </style>
 </head>
-<body class="form-page" style="background: #f1f5f9;">
+<body class="form-page page-bg-slate">
 
-    <div class="form-shell admin-login-shell">
+    <div class="form-shell login-shell-admin">
         
         <!-- Standard White Form Card with Dark Slate Accents -->
-        <div class="form-card" style="box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08); border-top: 4px solid #0f172a; padding: 32px 36px;">
+        <div class="form-card login-card-admin">
             
             <!-- Top Utility Bar: Admin Badge & Language Selector -->
-            <div class="form-top-bar" style="margin-bottom: 20px;">
-                <div class="admin-header-chip">
+            <div class="form-top-bar form-group-mb-20">
+                <div class="login-chip-admin">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -60,21 +42,21 @@
                 </div>
             </div>
 
-            <div class="form-header" style="margin-bottom: 24px;">
-                <h1 class="form-title" style="color: #0f172a; font-size: 22px;">Masuk Administrator</h1>
+            <div class="form-header form-group-mb-24">
+                <h1 class="form-title login-title-admin">Masuk Administrator</h1>
                 <p class="form-subtitle">Autentikasi verifikator Walidata untuk mengelola tiket permohonan dan verifikasi bagi pakai DTSEN.</p>
             </div>
 
             <!-- Laptop Device Identification Badge -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; margin-bottom: 20px; font-size: 11px; color: #334155; display: flex; align-items: center; justify-content: space-between;">
-                <span><i class="fi fi-rr-laptop" style="color: #0f172a;"></i> <strong>ID Laptop Admin:</strong></span>
-                <span id="detectedLaptopId" style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #0f172a;">
+            <div class="login-device-badge">
+                <span><i class="fi fi-rr-laptop login-title-admin"></i> <strong>ID Laptop Admin:</strong></span>
+                <span id="detectedLaptopId" class="login-device-id-admin">
                     Memuat...
                 </span>
             </div>
 
             @if(isset($errors) && $errors->any())
-                <div class="form-alert-error" style="margin-bottom: 18px;">
+                <div class="form-alert-error form-group-mb-16">
                     <span>{{ $errors->first() }}</span>
                 </div>
             @endif
@@ -82,7 +64,7 @@
             <form action="{{ route('admin.login.process') }}" method="POST">
                 @csrf
 
-                <div class="form-group" style="margin-bottom: 16px;">
+                <div class="form-group form-group-mb-16">
                     <label for="input_login" class="form-label">
                         <span>Username atau Email Administrator</span> <span class="form-required">*</span>
                     </label>
@@ -96,7 +78,7 @@
                            autofocus>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 24px;">
+                <div class="form-group form-group-mb-24">
                     <label for="input_password" class="form-label">
                         <span>Kata Sandi Administrator</span> <span class="form-required">*</span>
                     </label>
@@ -108,7 +90,7 @@
                            required>
                 </div>
 
-                <button type="submit" class="form-btn-submit" style="width: 100%; justify-content: center; background: #0f172a; border-color: #0f172a;">
+                <button type="submit" class="form-btn-submit login-btn-admin">
                     <span>Masuk ke Dashboard Administrator</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -121,7 +103,7 @@
         <!-- Footer Notice -->
         <footer class="form-footer">
             <p>Portal Pengendalian Data Terpadu Sosial Ekonomi Nasional (DTSEN) — Administrator</p>
-            <p style="font-size: 11px; margin-top: 4px; color: var(--text-muted);">
+            <p class="login-footer-desc">
                 Akses Administrator terproteksi secara ketat. Semua percobaan akses ilegal diawasi dan dicatat.
             </p>
         </footer>

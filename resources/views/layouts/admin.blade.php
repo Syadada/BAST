@@ -22,7 +22,7 @@
         <header class="app-header">
             <div class="app-header-left">
                 <a href="{{ route('admin.dashboard') }}" class="app-brand">
-                    <div class="app-brand-icon" style="background: #0b57d0; color: #fff; font-weight: 800; font-size: 11px;">
+                    <div class="app-brand-icon app-brand-icon-dtsen">
                         DTSEN
                     </div>
                     <div class="app-brand-title">
@@ -45,7 +45,7 @@
                     <span>{{ Auth::user()->name ?? 'Administrator' }}</span>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" style="display: inline; margin: 0;">
+                <form action="{{ route('logout') }}" method="POST" class="form-inline">
                     @csrf
                     <button type="submit" class="btn-header-logout" title="Keluar dari akun">
                         <i class="fi fi-rr-sign-out-alt"></i> Logout
@@ -64,7 +64,7 @@
                     <li>
                         <a href="{{ route('admin.dashboard') }}" class="app-nav-item {{ request()->routeIs('admin.dashboard') || request()->routeIs('admin.riwayat') ? 'active' : '' }}">
                             <div class="app-nav-item-left">
-                                <i class="fi fi-rr-apps" style="font-size: 16px;"></i>
+                                <i class="fi fi-rr-apps app-nav-icon"></i>
                                 <span>Manajemen Tiket & Proses</span>
                             </div>
                         </a>
@@ -74,19 +74,29 @@
                     <li>
                         <a href="{{ route('admin.tiket.index') }}" class="app-nav-item {{ request()->routeIs('admin.tiket.*') ? 'active' : '' }}">
                             <div class="app-nav-item-left">
-                                <i class="fi fi-rr-ticket" style="font-size: 16px;"></i>
+                                <i class="fi fi-rr-ticket app-nav-icon"></i>
                                 <span>Daftar Tiket Support</span>
                             </div>
-                            <span class="app-nav-badge" style="background: #eaf1fb; color: #0b57d0;">Tiket</span>
+                            <span class="app-nav-badge app-nav-badge-tiket">Tiket</span>
                         </a>
                     </li>
 
-                    <!-- 3. User Management & Log Laptop -->
+                    <!-- 3. Manajemen Pengguna -->
                     <li>
                         <a href="{{ route('admin.users.index') }}" class="app-nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                             <div class="app-nav-item-left">
-                                <i class="fi fi-rr-users" style="font-size: 16px;"></i>
-                                <span>User Management & Log</span>
+                                <i class="fi fi-rr-users app-nav-icon"></i>
+                                <span>Manajemen Pengguna</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- 4. Log Laptop & Audit -->
+                    <li>
+                        <a href="{{ route('admin.logs.index') }}" class="app-nav-item {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
+                            <div class="app-nav-item-left">
+                                <i class="fi fi-rr-laptop app-nav-icon"></i>
+                                <span>Log Laptop & Audit</span>
                             </div>
                         </a>
                     </li>
@@ -99,7 +109,7 @@
                     <li>
                         <a href="{{ route('admin.riwayat.export') }}" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <i class="fi fi-rr-download" style="font-size: 16px;"></i>
+                                <i class="fi fi-rr-download app-nav-icon"></i>
                                 <span>Ekspor Data Tiket (CSV)</span>
                             </div>
                         </a>
@@ -107,7 +117,7 @@
                     <li>
                         <a href="{{ route('admin.riwayat.export-logs', ['format' => 'csv']) }}" class="app-nav-item">
                             <div class="app-nav-item-left">
-                                <i class="fi fi-rr-document" style="font-size: 16px;"></i>
+                                <i class="fi fi-rr-document app-nav-icon"></i>
                                 <span>Ekspor Log Audit (CSV)</span>
                             </div>
                         </a>
@@ -115,19 +125,19 @@
                 </ul>
             </aside>
 
-            <!-- Main Content Area Admin -->
-            <main class="app-main" style="flex: 1; padding: 28px 32px; background: #f8fafc; min-width: 0;">
+            <!-- Main Content Area Admin (Scrollable) -->
+            <main class="app-main-content">
                 
                 <!-- Flash Messages -->
                 @if(session('success'))
-                    <div class="form-alert-success" style="margin-bottom: 20px;">
+                    <div class="form-alert-success flash-margin-bottom">
                         <i class="fi fi-rr-check"></i>
                         <span>{{ session('success') }}</span>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="form-alert-error" style="margin-bottom: 20px;">
+                    <div class="form-alert-error flash-margin-bottom">
                         <i class="fi fi-rr-cross-circle"></i>
                         <span>{{ session('error') }}</span>
                     </div>

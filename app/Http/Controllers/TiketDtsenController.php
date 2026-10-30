@@ -51,6 +51,11 @@ class TiketDtsenController extends Controller
         $totalSelesai = TiketDtsen::where('step5_done', true)->count();
         $totalProses = TiketDtsen::where('step5_done', false)->count();
 
+        // Jika pengguna sudah login sebagai OPD, tampilkan form tiket ber-sidebar & ber-header
+        if (auth()->check()) {
+            return view('opd.tiket.create');
+        }
+
         return view('formulir.dtsen_tiket', compact(
             'tikets',
             'selectedTiket',
@@ -58,6 +63,14 @@ class TiketDtsenController extends Controller
             'totalSelesai',
             'totalProses'
         ));
+    }
+
+    /**
+     * Halaman Khusus Buat Tiket Baru (OPD Portal)
+     */
+    public function create()
+    {
+        return view('opd.tiket.create');
     }
 
     /**
@@ -153,8 +166,8 @@ class TiketDtsenController extends Controller
             ['nomor_tiket' => $nomorTiket, 'instansi' => $tiket->nama_instansi]
         );
 
-        return redirect()->route('formulir.index', ['track_id' => $tiket->id])
-            ->with('success', "Tiket Layanan DTSEN berhasil dibuat dengan Nomor: {$nomorTiket}! Status dapat dipantau pada progress bar di bawah.")
+        return redirect()->route('opd.layanan-bagi-pakai', ['track_id' => $tiket->id])
+            ->with('success', "Tiket Layanan DTSEN berhasil dibuat dengan Nomor: {$nomorTiket}! Status dan tahapan alur dapat dipantau di bawah.")
             ->with('new_tiket_id', $tiket->id);
     }
 

@@ -25,3 +25,12 @@ yarn-error.log
 /php
 /scratch
 composer.phar
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.venv
+venv/
+.venv/
+.pytest_cache/

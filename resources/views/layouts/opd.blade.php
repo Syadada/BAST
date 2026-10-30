@@ -55,7 +55,7 @@
                 </a>
 
                 <!-- 4. Buat Tiket Baru (Formulir Pengajuan) -->
-                <a href="{{ route('formulir.index') }}" class="opd-nav-link {{ request()->routeIs('formulir.*') ? 'active' : '' }}">
+                <a href="{{ route('opd.tiket.create') }}" class="opd-nav-link {{ request()->routeIs('formulir.*') || request()->routeIs('opd.tiket.create') ? 'active' : '' }}">
                     <i class="fi fi-rr-plus"></i>
                     <span>Buat Tiket Baru</span>
                     <span class="opd-nav-badge">+Form</span>
@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                <form action="{{ route('logout') }}" method="POST" class="form-inline">
                     @csrf
                     <button type="submit" class="opd-logout-btn">
                         <i class="fi fi-rr-sign-out-alt"></i>
@@ -108,28 +108,28 @@
                 </div>
 
                 <div class="opd-topbar-right">
-                    <div style="font-size: 12px; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                    <div class="opd-topbar-date">
                         <i class="fi fi-rr-calendar"></i>
                         <span>{{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
                     </div>
 
-                    <a href="{{ route('formulir.index') }}" class="btn-pill-primary" style="font-size: 12px; padding: 7px 16px;">
+                    <a href="{{ route('formulir.index') }}" class="btn-pill-primary ticket-btn-back">
                         <i class="fi fi-rr-plus"></i> Tiket Baru
                     </a>
                 </div>
             </header>
 
             <!-- Alert Flash Messages -->
-            <div style="padding: 18px 32px 0; max-width: 1200px; width: 100%; margin: 0 auto;">
+            <div class="opd-flash-container">
                 @if(session('success'))
-                    <div class="form-alert-success" style="margin-bottom: 0;">
+                    <div class="form-alert-success opd-flash-alert">
                         <i class="fi fi-rr-check"></i>
                         <span>{{ session('success') }}</span>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="form-alert-error" style="margin-bottom: 0;">
+                    <div class="form-alert-error opd-flash-alert">
                         <i class="fi fi-rr-cross-circle"></i>
                         <span>{{ session('error') }}</span>
                     </div>

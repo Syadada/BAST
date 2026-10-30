@@ -5,7 +5,7 @@
 @section('page_subtitle', 'Daftar Tiket Layanan Bagi Pakai DTSEN Instansi Anda')
 
 @section('content')
-<div style="display: flex; flex-direction: column; gap: 20px;">
+<div class="ticket-stack-container">
 
     <!-- Breadcrumb Navigasi -->
     <nav class="app-breadcrumb">
@@ -21,22 +21,22 @@
         <div class="ticket-portal-header">
             <div>
                 <h2 class="ticket-portal-title">
-                    <i class="fi fi-rr-ticket" style="color: #0b57d0;"></i>
+                    <i class="fi fi-rr-ticket color-status-progress"></i>
                     <span>Daftar Tiket Dukungan & Permohonan</span>
                 </h2>
-                <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
+                <div class="portal-subtitle">
                     Klik pada <strong>Nomor Tiket</strong> untuk melihat rincian progress tahapan secara lebih jelas.
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <form action="{{ route('opd.tiket.index') }}" method="GET" style="display: flex; gap: 8px; align-items: center; margin: 0;">
-                    <div style="position: relative;">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari No. Tiket / SE..." class="form-input" style="height: 38px; font-size: 13px; padding-left: 32px; width: 220px;">
-                        <i class="fi fi-rr-search" style="position: absolute; left: 10px; top: 11px; color: #94a3b8; font-size: 13px;"></i>
+            <div class="ticket-filter-bar">
+                <form action="{{ route('opd.tiket.index') }}" method="GET" class="ticket-filter-form">
+                    <div class="ticket-search-box">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari No. Tiket / SE..." class="form-input ticket-search-input">
+                        <i class="fi fi-rr-search ticket-search-icon"></i>
                     </div>
 
-                    <select name="status" onchange="this.form.submit()" class="form-select" style="height: 38px; font-size: 13px; padding: 4px 10px; width: 150px;">
+                    <select name="status" onchange="this.form.submit()" class="form-select ticket-filter-select">
                         <option value="">Semua Status</option>
                         <option value="PROSES" {{ request('status') === 'PROSES' ? 'selected' : '' }}>Sedang Berjalan</option>
                         <option value="SELESAI" {{ request('status') === 'SELESAI' ? 'selected' : '' }}>Selesai (100%)</option>
@@ -44,7 +44,7 @@
                     </select>
                 </form>
 
-                <a href="{{ route('formulir.index') }}" class="btn-pill-primary" style="font-size: 12.5px; padding: 8px 18px;">
+                <a href="{{ route('opd.tiket.create') }}" class="btn-pill-primary ticket-btn-back">
                     <i class="fi fi-rr-plus"></i> Buat Tiket Baru
                 </a>
             </div>
@@ -55,10 +55,10 @@
             <table class="ticket-portal-table">
                 <thead>
                     <tr>
-                        <th style="width: 28%;">Nama Instansi</th>
-                        <th style="width: 32%;">Subject (Nomor Tiket)</th>
-                        <th style="width: 20%;">Status</th>
-                        <th style="width: 20%;">Last Updated</th>
+                        <th class="th-w-28">Nama Instansi</th>
+                        <th class="th-w-32">Subject (Nomor Tiket)</th>
+                        <th class="th-w-20">Status</th>
+                        <th class="th-w-20">Last Updated</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,10 +66,10 @@
                         <tr>
                             <!-- 1. Nama Instansi -->
                             <td>
-                                <div style="font-weight: 700; color: #0f172a; font-size: 14px;">
+                                <div class="ticket-table-instansi">
                                     {{ $t->nama_instansi }}
                                 </div>
-                                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                                <div class="ticket-table-pic">
                                     PIC: {{ $t->nama_pemohon }}
                                 </div>
                             </td>
@@ -78,7 +78,7 @@
                             <td>
                                 <a href="{{ route('opd.tiket.show', $t->id) }}" class="ticket-subject-link" title="Klik untuk melihat progress tiket ini">
                                     <span class="ticket-subject-num">#{{ $t->nomor_tiket }}</span>
-                                    <i class="fi fi-rr-arrow-up-right" style="font-size: 11px;"></i>
+                                    <i class="fi fi-rr-arrow-up-right icon-size-11"></i>
                                 </a>
                                 <span class="ticket-subject-subtitle">
                                     SE: <strong>{{ $t->no_surat_edaran }}</strong> | {{ count($t->variabel_dtsen ?? []) }} Variabel
@@ -104,25 +104,25 @@
 
                             <!-- 4. Last Updated -->
                             <td>
-                                <div style="font-size: 13px; font-weight: 600; color: #1e293b;">
+                                <div class="ticket-table-updated">
                                     {{ $t->updated_at ? $t->updated_at->format('d/m/Y H:i') . ' WIB' : '-' }}
                                 </div>
-                                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                                <div class="ticket-table-ago">
                                     {{ $t->updated_at ? $t->updated_at->diffForHumans() : '-' }}
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" style="text-align: center; padding: 48px 20px; color: #64748b;">
-                                <div style="font-size: 32px; color: #94a3b8; margin-bottom: 10px;">
+                            <td colspan="4" class="ticket-empty-cell">
+                                <div class="ticket-empty-icon">
                                     <i class="fi fi-rr-ticket"></i>
                                 </div>
-                                <div style="font-weight: 700; font-size: 15px; color: #0f172a;">Belum Ada Tiket Permohonan</div>
-                                <div style="font-size: 13px; color: #64748b; margin-top: 4px; margin-bottom: 16px;">
+                                <div class="ticket-empty-title">Belum Ada Tiket Permohonan</div>
+                                <div class="ticket-empty-desc form-group-mb-16">
                                     Anda belum memiliki tiket permohonan aktif atau sesuai filter yang dipilih.
                                 </div>
-                                <a href="{{ route('formulir.index') }}" class="btn-clean-cta" style="font-size: 13px; padding: 10px 22px;">
+                                <a href="{{ route('formulir.index') }}" class="btn-clean-cta ticket-btn-back">
                                     <i class="fi fi-rr-plus"></i> Buat Tiket Sekarang
                                 </a>
                             </td>
@@ -133,7 +133,7 @@
         </div>
 
         @if($tikets->hasPages())
-            <div style="padding: 16px 24px; border-top: 1px solid #f1f5f9;">
+            <div class="ticket-pagination-wrap">
                 {{ $tikets->links() }}
             </div>
         @endif

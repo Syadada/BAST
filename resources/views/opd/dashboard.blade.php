@@ -10,20 +10,20 @@
     <!-- Active Ticket Notice (Jika Ada Tiket yang Sedang Berjalan) -->
     @if($latestTiket)
         <div class="opd-quick-ticket-banner">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 38px; height: 38px; border-radius: 10px; background: #eaf1fb; color: #0b57d0; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+            <div class="quick-banner-left">
+                <div class="quick-banner-icon">
                     <i class="fi fi-rr-time-forward"></i>
                 </div>
                 <div>
-                    <div style="font-size: 12px; color: #64748b; font-weight: 600;">Tiket Permohonan Terakhir:</div>
-                    <div style="font-size: 14px; font-weight: 700; color: #0f172a;">
+                    <div class="quick-banner-label">Tiket Permohonan Terakhir:</div>
+                    <div class="quick-banner-num">
                         {{ $latestTiket->nomor_tiket }} 
-                        <span style="font-weight: 500; font-size: 12px; color: #64748b;">(SE: {{ $latestTiket->no_surat_edaran }})</span>
+                        <span class="quick-banner-se">(SE: {{ $latestTiket->no_surat_edaran }})</span>
                     </div>
                 </div>
             </div>
             <div>
-                <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline" style="font-size: 12px; padding: 7px 16px; background: #ffffff;">
+                <a href="{{ route('opd.layanan-bagi-pakai') }}" class="btn-pill-outline ticket-btn-download">
                     <i class="fi fi-rr-eye"></i> Pantau Progress di Layanan DTSEN &rarr;
                 </a>
             </div>
@@ -51,7 +51,7 @@
 
         <!-- Aksi Utama: Tombol Buat Tiket Baru -->
         <div>
-            <a href="{{ route('formulir.index') }}" class="btn-clean-cta" id="btnBuatTiketBaru">
+            <a href="{{ route('opd.tiket.create') }}" class="btn-clean-cta" id="btnBuatTiketBaru">
                 <i class="fi fi-rr-plus"></i>
                 <span>Buat Tiket Baru</span>
             </a>
@@ -60,7 +60,7 @@
 
     <!-- Alur Panduan Layanan (3 Langkah Ringkas & Bersih) -->
     <div>
-        <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; padding-left: 4px;">
+        <div class="guide-section-heading">
             Alur Layanan Bagi Pakai DTSEN:
         </div>
 

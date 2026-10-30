@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'layananBagiPakai'])->name('profile'); // Dukungan alias
 
         // 4. Layanan Tiket Permohonan DTSEN & Revisi Variabel
+        Route::get('/opd/tiket/create', [TiketDtsenController::class, 'create'])->name('opd.tiket.create');
         Route::get('/formulir', [TiketDtsenController::class, 'index'])->name('formulir.index');
         Route::post('/formulir', [TiketDtsenController::class, 'store'])->name('formulir.store');
         Route::post('/tiket', [TiketDtsenController::class, 'store'])->name('tiket.store');
@@ -98,10 +99,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/riwayat/export', [HistoryController::class, 'exportCsv'])->name('riwayat.export');
         Route::get('/riwayat/export-logs', [HistoryController::class, 'exportLogs'])->name('riwayat.export-logs');
         
-        // User Management & Log Laptop/Perangkat Login
+        // User Management
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
         Route::post('/users', [UserController::class, 'storeUser'])->name('users.store');
         Route::delete('/users/{id}', [UserController::class, 'destroyUser'])->name('users.destroy');
+        
+        // Log Laptop & Audit Keamanan
+        Route::get('/logs', [UserController::class, 'logsIndex'])->name('logs.index');
         
         // Input & Kelola Tabel Riwayat Bagi Pakai Data DTSEN Resmi
         Route::post('/riwayat-bagi-data', [UserController::class, 'storeRiwayatBagiData'])->name('riwayat-bagi-data.store');

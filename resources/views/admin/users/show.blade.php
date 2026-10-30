@@ -1,0 +1,301 @@
+@extends('layouts.admin')
+
+@section('title', 'Detail Akun Pengguna: ' . $user->username . ' — Admin Panel')
+
+@section('content')
+<div class="ticket-stack-container">
+
+    <!-- Breadcrumb Navigasi -->
+    <nav class="app-breadcrumb">
+        <a href="{{ route('admin.dashboard') }}"><i class="fi fi-rr-apps"></i> Dashboard Admin</a>
+        <span class="separator">/</span>
+        <a href="{{ route('admin.users.index') }}"><i class="fi fi-rr-users"></i> Manajemen Pengguna</a>
+        <span class="separator">/</span>
+        <span class="current">{{ $user->username }}</span>
+    </nav>
+
+    <!-- Top Action Bar -->
+    <div class="page-top-bar">
+        <div>
+            <h1 class="page-top-title">
+                <i class="fi fi-rr-user"></i>
+                <span>Detail Akun Pengguna</span>
+            </h1>
+            <p class="page-top-subtitle">
+                Rincian lengkap profil instansi, hak akses, jejak digital perangkat, dan riwayat permohonan.
+            </p>
+        </div>
+        <div>
+            <a href="{{ route('admin.users.index') }}" class="btn-pill-secondary">
+                <i class="fi fi-rr-arrow-left"></i>
+                <span>Kembali ke Daftar Pengguna</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Profil Card Strip -->
+    <div class="admin-card-section">
+        <div class="admin-card-body">
+            <div class="user-modal-profile-strip">
+                <div class="user-modal-strip-left">
+                    <div class="user-modal-avatar">
+                        {{ strtoupper(substr($user->username, 0, 1)) }}
+                    </div>
+                    <div>
+                        <div class="user-modal-strip-uname">{{ $user->username }}</div>
+                        <div class="user-modal-strip-instansi">{{ $user->nama_instansi ?: 'Pemerintah Daerah' }}</div>
+                    </div>
+                </div>
+                <div>
+                    @if($user->role === 'superadmin')
+                        <span class="role-badge-super">
+                            <i class="fi fi-rr-shield-check"></i> Super Administrator
+                        </span>
+                    @else
+                        <span class="role-badge-opd">
+                            <i class="fi fi-rr-building"></i> Perangkat Daerah (OPD)
+                        </span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Bagian 1: Informasi Profil & Kontak -->
+            <div class="user-modal-section-title">
+                <i class="fi fi-rr-id-badge"></i>
+                <span>Informasi Profil & Kontak</span>
+            </div>
+            <div class="user-modal-grid-2">
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">ID Pengguna</div>
+                    <div class="user-modal-field-value">#{{ $user->id }}</div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Nama Lengkap PIC / Pemohon</div>
+                    <div class="user-modal-field-value">{{ $user->name }}</div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Alamat Email</div>
+                    <div class="user-modal-field-value">{{ $user->email }}</div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Nomor Telepon / WhatsApp</div>
+                    <div class="user-modal-field-value">{{ $user->nomor_kontak ?: 'Belum ditambahkan' }}</div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Nama Instansi / Satker</div>
+                    <div class="user-modal-field-value">{{ $user->nama_instansi ?: 'Pemerintah Daerah' }}</div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Tanggal Akun Diterbitkan</div>
+                    <div class="user-modal-field-value">
+                        {{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('d M Y, H:i') . ' WIB' : '-' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian 2: Jejak Perangkat & Keamanan -->
+            <div class="user-modal-section-title">
+                <i class="fi fi-rr-laptop"></i>
+                <span>Jejak Digital Perangkat & Keamanan Login</span>
+            </div>
+            <div class="user-modal-grid-2">
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Nomor Laptop / Device ID Terakhir</div>
+                    <div class="user-modal-field-value">
+                        @if($user->last_device_id)
+                            <span class="device-badge">
+                                <i class="fi fi-rr-laptop"></i>
+                                {{ $user->last_device_id }}
+                            </span>
+                        @else
+                            <span class="device-badge">
+                                <i class="fi fi-rr-minus"></i>
+                                Belum Pernah Login
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Alamat IP Terakhir</div>
+                    <div class="user-modal-field-value">
+                        <span class="table-cell-ip">{{ $user->last_login_ip ?: '-' }}</span>
+                    </div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Waktu Login Terakhir</div>
+                    <div class="user-modal-field-value">
+                        {{ $user->last_login_at ? \Carbon\Carbon::parse($user->last_login_at)->format('d M Y, H:i:s') . ' WIB' : 'Belum pernah login' }}
+                    </div>
+                </div>
+                <div class="user-modal-card-item">
+                    <div class="user-modal-field-label">Status Akun</div>
+                    <div class="user-modal-field-value">
+                        <span class="role-badge-opd">
+                            <i class="fi fi-rr-check-circle"></i> Aktif
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-modal-footer">
+            <a href="{{ route('admin.users.index') }}" class="btn-pill-secondary">
+                <i class="fi fi-rr-arrow-left"></i>
+                <span>Kembali</span>
+            </a>
+            @if($user->id !== auth()->id())
+                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun {{ $user->username }} ({{ $user->nama_instansi }})? Tindakan ini tidak dapat dibatalkan.');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-pill-danger">
+                        <i class="fi fi-rr-trash"></i>
+                        <span>Hapus Akun Pengguna</span>
+                    </button>
+                </form>
+            @else
+                <span class="role-badge-super">Akun Anda Sendiri (Aktif)</span>
+            @endif
+        </div>
+    </div>
+
+    <!-- Riwayat Tiket Permohonan Terkait Akun Ini -->
+    <div class="admin-card-section">
+        <div class="admin-card-header">
+            <div class="admin-card-header-left">
+                <h2 class="admin-card-header-title">
+                    <i class="fi fi-rr-ticket"></i>
+                    <span>Riwayat Tiket Permohonan dari Instansi Ini</span>
+                </h2>
+            </div>
+            <div class="admin-card-header-sub">
+                Total {{ $userTikets->count() }} tiket diajukan
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="table-col-id">No Tiket</th>
+                        <th>Perihal / Surat Edaran</th>
+                        <th class="table-col-nowrap">Status Tiket</th>
+                        <th class="table-col-nowrap">Tanggal Pengajuan</th>
+                        <th class="table-col-action">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($userTikets as $t)
+                        <tr>
+                            <td class="table-col-id">
+                                <a href="{{ route('admin.tiket.show', $t->id) }}" class="user-subject-link" title="Buka Detail Tiket">
+                                    <span class="user-subject-uname">#{{ $t->nomor_tiket }}</span>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="user-title-bold">{{ $t->perihal ?: 'Permohonan Bagi Pakai Data DTSEN' }}</div>
+                                <div class="user-sub-muted">Dasar Surat: {{ $t->no_surat_edaran ?: '-' }}</div>
+                            </td>
+                            <td class="table-col-nowrap">
+                                @if($t->step5_done)
+                                    <span class="role-badge-opd"><i class="fi fi-rr-check"></i> Selesai (100%)</span>
+                                @elseif($t->status === 'PERLU_PERBAIKAN')
+                                    <span class="role-badge-super"><i class="fi fi-rr-exclamation"></i> Perlu Perbaikan</span>
+                                @else
+                                    <span class="role-badge-opd"><i class="fi fi-rr-time-forward"></i> {{ $t->current_status_label }}</span>
+                                @endif
+                            </td>
+                            <td class="table-col-nowrap">
+                                <div class="user-title-name">{{ \Carbon\Carbon::parse($t->created_at)->format('d M Y') }}</div>
+                                <div class="user-sub-muted">{{ \Carbon\Carbon::parse($t->created_at)->format('H:i') }} WIB</div>
+                            </td>
+                            <td class="table-col-action">
+                                <a href="{{ route('admin.tiket.show', $t->id) }}" class="btn-pill-secondary" title="Lihat Progress Tiket">
+                                    <i class="fi fi-rr-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="table-empty-box">
+                                <div class="table-empty-icon">
+                                    <i class="fi fi-rr-ticket"></i>
+                                </div>
+                                <div class="table-empty-text">Belum ada riwayat tiket permohonan dari akun instansi ini.</div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Riwayat Audit Login Laptop Akun Ini -->
+    <div class="admin-card-section">
+        <div class="admin-card-header">
+            <div class="admin-card-header-left">
+                <h2 class="admin-card-header-title">
+                    <i class="fi fi-rr-laptop"></i>
+                    <span>Jejak Audit Aktivitas Login Laptop Akun Ini</span>
+                </h2>
+            </div>
+            <div class="admin-card-header-sub">
+                Mencatat 15 aktivitas sesi terakhir
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="table-col-id">ID Log</th>
+                        <th class="table-col-nowrap">Waktu & Tanggal</th>
+                        <th class="table-col-nowrap">Nomor Laptop / Device ID</th>
+                        <th class="table-col-nowrap">Alamat IP</th>
+                        <th>Keterangan Aktivitas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($userLogs as $log)
+                        <tr>
+                            <td class="table-col-id">#{{ $log->id }}</td>
+                            <td class="table-col-nowrap">
+                                <div class="user-title-name">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</div>
+                                <div class="user-sub-muted">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }} WIB</div>
+                            </td>
+                            <td class="table-col-nowrap">
+                                @if($log->device_id)
+                                    <span class="device-badge">
+                                        <i class="fi fi-rr-laptop"></i>
+                                        {{ $log->device_id }}
+                                    </span>
+                                @else
+                                    <span class="device-badge">
+                                        <i class="fi fi-rr-shield-question"></i>
+                                        -
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="table-col-nowrap">
+                                <span class="table-cell-ip">{{ $log->ip_address ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <div class="user-title-name">{{ $log->description }}</div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="table-empty-box">
+                                <div class="table-empty-icon">
+                                    <i class="fi fi-rr-laptop"></i>
+                                </div>
+                                <div class="table-empty-text">Belum ada riwayat jejak audit login untuk pengguna ini.</div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+@endsection

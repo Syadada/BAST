@@ -13,24 +13,113 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * Halaman Manajemen Pengguna & Log Perangkat Laptop (Hak Kendali Super Admin)
+     * Halaman Manajemen Pengguna (Hak Kendali Super Admin)
      */
     public function index(Request $request)
     {
-        $users = User::latest()->paginate(15, ['*'], 'users_page');
-        
-        // Log nomor laptop / perangkat yang digunakan login
-        $loginLogs = AuditLog::where('action', 'AUTH_LOGIN')
-            ->latest()
-            ->paginate(15, ['*'], 'logs_page');
+        $activeTab = $request->query('tab', 'users');
 
+        $users = User::latest()->paginate(15, ['*'], 'users_page')->appends(['tab' => 'users']);
+        
         // Data Riwayat Bagi Data DTSEN Resmi
-        $riwayatBagiDatas = RiwayatBagiDataDtsen::latest()->paginate(15, ['*'], 'riwayat_page');
+        $riwayatBagiDatas = RiwayatBagiDataDtsen::latest()->paginate(15, ['*'], 'riwayat_page')->appends(['tab' => 'riwayat-terbit']);
 
         // Daftar tiket untuk referensi cepat input riwayat
         $availableTikets = TiketDtsen::latest()->get();
 
-        return view('admin.users.index', compact('users', 'loginLogs', 'riwayatBagiDatas', 'availableTikets'));
+        // Statistik Pengguna
+        $totalUsers = User::count();
+        $totalOpd = User::where('role', 'perangkat_daerah')->count();
+        $totalAdmin = User::where('role', 'superadmin')->count();
+
+        return view('admin.users.index', compact('users', 'riwayatBagiDatas', 'availableTikets', 'totalUsers', 'totalOpd', 'totalAdmin', 'activeTab'));
+    }
+
+    /**
+     * Halaman Detail Akun Pengguna (Profil, Info Kontak, Riwayat Tiket & Jejak Laptop)
+     */
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Tiket permohonan yang diajukan pengguna / instansi ini
+        $userTikets = TiketDtsen::where('user_id', $user->id)
+            ->orWhere('nama_opd', $user->nama_instansi)
+            ->latest()
+            ->take(15)
+            ->get();
+
+        // Jejak audit login & aktivitas pengguna ini
+        $userLogs = AuditLog::where(function($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('description', 'like', "%{$user->username}%");
+            })
+            ->latest()
+            ->take(15)
+            ->get();
+
+        // Riwayat bagi data resmi DTSEN yang terkait instansi pengguna ini
+        $userRiwayats = RiwayatBagiDataDtsen::where('nama_instansi', $user->nama_instansi)
+            ->latest()
+            ->get();
+
+        return view('admin.users.show', compact('user', 'userTikets', 'userLogs', 'userRiwayats'));
+    }
+
+    /**
+     * Halaman Khusus Log Laptop & Audit Keamanan dengan Sub Page Tab
+     */
+    public function logsIndex(Request $request)
+    {
+        $activeTab = $request->query('tab', 'laptop');
+
+        // Log Nomor Laptop / Perangkat Login
+        $laptopLogs = AuditLog::where('action', 'like', 'AUTH_LOGIN%')
+            ->latest()
+            ->paginate(15, ['*'], 'laptop_page')
+            ->appends(['tab' => 'laptop']);
+
+        // Log Keamanan & Akses Ditolak
+        $securityLogs = AuditLog::where(function($q) {
+                $q->where('action', 'like', 'AUTH_REJECTED%')
+                  ->orWhere('action', 'like', 'AUTH_FAILED%')
+                  ->orWhere('action', 'like', 'UNAUTHORIZED%');
+            })
+            ->latest()
+            ->paginate(15, ['*'], 'security_page')
+            ->appends(['tab' => 'keamanan']);
+
+        // Log Aktivitas Tiket
+        $tiketLogs = AuditLog::where('action', 'like', 'TIKET%')
+            ->latest()
+            ->paginate(15, ['*'], 'tiket_page')
+            ->appends(['tab' => 'tiket']);
+
+        // Semua Log Audit
+        $allLogs = AuditLog::latest()
+            ->paginate(15, ['*'], 'all_page')
+            ->appends(['tab' => 'semua']);
+
+        $totalLogs = AuditLog::count();
+        $uniqueDevices = AuditLog::whereNotNull('device_id')->distinct('device_id')->count('device_id');
+        $todayLogs = AuditLog::whereDate('created_at', today())->count();
+        $securityAlerts = AuditLog::where(function($q) {
+            $q->where('action', 'like', 'AUTH_REJECTED%')
+              ->orWhere('action', 'like', 'AUTH_FAILED%')
+              ->orWhere('action', 'like', 'UNAUTHORIZED%');
+        })->count();
+
+        return view('admin.logs.index', compact(
+            'activeTab', 
+            'laptopLogs', 
+            'securityLogs', 
+            'tiketLogs', 
+            'allLogs', 
+            'totalLogs', 
+            'uniqueDevices', 
+            'todayLogs', 
+            'securityAlerts'
+        ));
     }
 
     /**
@@ -68,7 +157,7 @@ class UserController extends Controller
             'SUCCESS'
         );
 
-        return back()->with('success', "Akun [{$user->username}] ({$user->nama_instansi}) berhasil dibuat.");
+        return redirect()->route('admin.users.index', ['tab' => 'users'])->with('success', "Akun [{$user->username}] ({$user->nama_instansi}) berhasil dibuat.");
     }
 
     /**
@@ -79,7 +168,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            return redirect()->route('admin.users.index', ['tab' => 'users'])->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         $username = $user->username;
@@ -92,7 +181,7 @@ class UserController extends Controller
             'WARNING'
         );
 
-        return back()->with('success', "Akun [{$username}] ({$instansi}) berhasil dihapus.");
+        return redirect()->route('admin.users.index', ['tab' => 'users'])->with('success', "Akun [{$username}] ({$instansi}) berhasil dihapus.");
     }
 
     /**
@@ -140,7 +229,7 @@ class UserController extends Controller
             'SUCCESS'
         );
 
-        return back()->with('success', "Data Riwayat Bagi Data DTSEN untuk [{$riwayat->nama_instansi}] berhasil disimpan dan tampil pada Profile Perangkat Daerah.");
+        return redirect()->route('admin.users.index', ['tab' => 'riwayat-terbit'])->with('success', "Data Riwayat Bagi Data DTSEN untuk [{$riwayat->nama_instansi}] berhasil disimpan dan tampil pada Profile Perangkat Daerah.");
     }
 
     /**
@@ -158,6 +247,6 @@ class UserController extends Controller
             'WARNING'
         );
 
-        return back()->with('success', "Data Riwayat Bagi Data DTSEN untuk [{$instansi}] berhasil dihapus.");
+        return redirect()->route('admin.users.index', ['tab' => 'riwayat-terbit'])->with('success', "Data Riwayat Bagi Data DTSEN untuk [{$instansi}] berhasil dihapus.");
     }
 }

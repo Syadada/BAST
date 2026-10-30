@@ -43,14 +43,12 @@ Alur kerja mengadopsi standar tata kelola BAST V2:
 ### Cara Cepat (Otomatis):
 
 #### Di Windows:
-Cukup klik dua kali file:
+Cukup klik dua kali satu file utama:
 ```cmd
-auto_setup.bat
+JALANKAN_SISTEM.bat
 ```
-Atau jika portable PHP lokal sudah tersedia:
-```cmd
-JALANKAN_LAYANAN_DTSEN.bat
-```
+*(File ini otomatis mendeteksi PHP, mengunduh seluruh dependensi Composer jika belum ada, migrasi database, dan membuka browser).*
+Lihat juga detail lengkap di [SYSTEM_REQUIREMENTS.md](SYSTEM_REQUIREMENTS.md).
 
 #### Di Linux / macOS / WSL:
 ```bash
