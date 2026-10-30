@@ -203,10 +203,33 @@ rem =======================================================================
 rem 8. MENJALANKAN SERVER PYTHON BACKEND DAN LARAVEL FRONTEND
 rem =======================================================================
 echo.
-echo [6/8] Menjalankan Python FastAPI Backend Engine pada port 8000...
+rem =======================================================================
+rem Deteksi Otomatis Port Bebas (Fallback Port jika 8080/8000 Sedang Dipakai)
+rem =======================================================================
+set "PYTHON_PORT=8000"
+for %%q in (8000 8001 8002 8003 8004 8005) do (
+    netstat -ano 2>nul | findstr /C:":%%q " | findstr "LISTENING" >nul 2>&1
+    if errorlevel 1 (
+        set "PYTHON_PORT=%%q"
+        goto :py_port_found
+    )
+)
+:py_port_found
+
+set "LARAVEL_PORT=8080"
+for %%p in (8080 8081 8082 8083 8084 8085 8086 8087 8088 8089 8888 8008) do (
+    netstat -ano 2>nul | findstr /C:":%%p " | findstr "LISTENING" >nul 2>&1
+    if errorlevel 1 (
+        set "LARAVEL_PORT=%%p"
+        goto :laravel_port_found
+    )
+)
+:laravel_port_found
+
+echo [6/8] Menjalankan Python FastAPI Backend Engine pada port %PYTHON_PORT%...
 if defined PYTHON_EXE (
-    start "Python Backend Engine" /b "%PYTHON_EXE%" -m uvicorn python_backend.server:app --host 127.0.0.1 --port 8000 >nul 2>&1
-    echo [OK] Python Backend aktif di http://127.0.0.1:8000/
+    start "Python Backend Engine" /b "%PYTHON_EXE%" -m uvicorn python_backend.server:app --host 127.0.0.1 --port %PYTHON_PORT% >nul 2>&1
+    echo [OK] Python Backend aktif di http://127.0.0.1:%PYTHON_PORT%/
 )
 
 rem Deteksi IP LAN Server untuk akses laptop lain
@@ -216,19 +239,19 @@ for /f "delims=" %%i in ('powershell -Command "(Get-CimInstance Win32_NetworkAda
 echo.
 echo =======================================================================
 echo [SISTEM SUKSES AKTIF]
-echo  - Backend Engine : Python FastAPI (Port 8000)
-echo  - Frontend Client: Laravel 12 Blade (Port 8080)
+echo  - Backend Engine : Python FastAPI (Port %PYTHON_PORT%)
+echo  - Frontend Client: Laravel 12 Blade (Port %LARAVEL_PORT%)
 echo  - Database       : SQLite WAL Mode (database/database.sqlite)
 echo.
 echo [AKSES DARI LAPTOP INI (SERVER)]
-echo  - Portal OPD     : http://127.0.0.1:8080/login
-echo  - Portal Admin   : http://127.0.0.1:8080/dkisp-secret/ (Rahasia)
+echo  - Portal OPD     : http://127.0.0.1:%LARAVEL_PORT%/login
+echo  - Portal Admin   : http://127.0.0.1:%LARAVEL_PORT%/dkisp-secret/ (Rahasia)
 echo.
 if defined SERVER_IP (
 echo [AKSES DARI LAPTOP LAIN DALAM JARINGAN WIFI ATAU LAN]
-echo  - Buka di Browser : http://%SERVER_IP%:8080/
-echo  - Portal OPD      : http://%SERVER_IP%:8080/login
-echo  - Portal Admin    : http://%SERVER_IP%:8080/dkisp-secret/
+echo  - Buka di Browser : http://%SERVER_IP%:%LARAVEL_PORT%/
+echo  - Portal OPD      : http://%SERVER_IP%:%LARAVEL_PORT%/login
+echo  - Portal Admin    : http://%SERVER_IP%:%LARAVEL_PORT%/dkisp-secret/
 echo.
 )
 echo [KREDENSIAL BAWAAN]
@@ -237,16 +260,12 @@ echo  - OPD Dinsos     : dinsos / dinsos123
 echo  - OPD Bappeda    : bappeda / bappeda123
 echo =======================================================================
 echo.
-rem Membebaskan port 8080 jika ada proses PHP lama yang masih menggantung
-for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8080 " ^| findstr "LISTENING"') do (
-    taskkill /f /pid %%a >nul 2>&1
-)
 
 echo [7/8] Menyiapkan pembukaan peramban browser otomatis...
-rem Menjalankan peluncuran browser pada proses terpisah dengan jeda 2 detik (TIDAK menutup atau menyembunyikan jendela CMD utama)
-start "" powershell -NoProfile -Command "Start-Sleep -Seconds 2; Start-Process 'http://127.0.0.1:8080/'"
+rem Menjalankan peluncuran browser pada proses terpisah ke port yang aktif (TIDAK menyentuh atau menutup jendela CMD)
+start "" powershell -NoProfile -Command "Start-Sleep -Seconds 2; Start-Process 'http://127.0.0.1:%LARAVEL_PORT%/'"
 
-echo [8/8] SERVER SEDANG AKTIF DI PORT 8080 (0.0.0.0)...
+echo [8/8] SERVER SEDANG AKTIF DI PORT %LARAVEL_PORT% (0.0.0.0)...
 echo.
 echo =======================================================================
 echo  [PENTING] JANGAN TUTUP JENDELA CMD INI SELAMA SISTEM DIGUNAKAN!
@@ -255,7 +274,7 @@ echo  ini ke taskbar. Jika jendela ini ditutup (X), maka website akan mati.
 echo  Tekan CTRL+C jika memang ingin menghentikan server secara manual.
 echo =======================================================================
 echo.
-"%PHP_EXE%" artisan serve --host=0.0.0.0 --port=8080
+"%PHP_EXE%" artisan serve --host=0.0.0.0 --port=%LARAVEL_PORT%
 
 echo.
 echo [INFO] Server Laravel telah dihentikan.
