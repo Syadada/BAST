@@ -241,8 +241,17 @@ echo [7/8] Menyiapkan pembukaan peramban browser otomatis...
 rem Menjalankan pengecekan socket di background agar browser baru terbuka saat server sudah benar-benar siap (mencegah error perlu di-refresh)
 start /b powershell -WindowStyle Hidden -Command "$ready = $false; for ($i=0; $i -lt 30; $i++) { try { $tcp = New-Object Net.Sockets.TcpClient('127.0.0.1', 8080); if ($tcp.Connected) { $tcp.Close(); $ready = $true; break; } } catch {} Start-Sleep -Milliseconds 300; }; Start-Process 'http://127.0.0.1:8080/'"
 
-echo [8/8] Server aktif di port 8080 (0.0.0.0). Tekan CTRL+C untuk berhenti.
+echo [8/8] SERVER SEDANG AKTIF DI PORT 8080 (0.0.0.0)...
+echo.
+echo =======================================================================
+echo  [PENTING] JANGAN TUTUP JENDELA CMD INI SELAMA SISTEM DIGUNAKAN!
+echo  Jendela CMD ini adalah mesin web server lokal. Cukup MINIMIZE jendela
+echo  ini ke taskbar. Jika jendela ini ditutup (X), maka website akan mati.
+echo  Tekan CTRL+C jika memang ingin menghentikan server secara manual.
+echo =======================================================================
 echo.
 "%PHP_EXE%" artisan serve --host=0.0.0.0 --port=8080
 
+echo.
+echo [INFO] Server Laravel telah dihentikan.
 pause
